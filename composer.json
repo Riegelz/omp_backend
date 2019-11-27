@@ -1,0 +1,19 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "bshaffer/oauth2-server-php": "^1.10",
+        "vlucas/phpdotenv": "^3.3",
+        "davidepastore/slim-validation": "^0.5.1"
+    },
+    "require-dev": {
+        "mockery/mockery": "dev-master",
+        "phpunit/phpunit": "^7"
+    },
+    "autoload": {
+    	"psr-4": {
+            "src\\omp\\": "src/public/class",
+            "src\\": "src/public/"
+	    }
+    }
+}
+
