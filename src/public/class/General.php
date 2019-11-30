@@ -16,6 +16,7 @@ class General
 		$arr_response_text['500']="Internal Server Error";
 		## Api Response ##
 		$arr_response_text['600']="Duplicate Account";
+		$arr_response_text['601']="Can Not Delete Account";
 
 		return $arr_response_text[$arr_response['response_code']];
 		

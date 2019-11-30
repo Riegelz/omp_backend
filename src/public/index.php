@@ -10,6 +10,7 @@ use src\omp\Model as Model;
 use src\omp\Oauth as Oauth;
 use src\omp\Search as Search;
 use src\omp\Create as Create;
+use src\omp\Delete as Delete;
 use src\omp\General as General;
 use src\omp\Validate as Validate;
 
@@ -18,7 +19,7 @@ $app = new \Slim\App(['settings' => ['displayErrorDetails' => getenv('DEBUG_MODE
 $authen = src\omp\Authen::middleware($app, $oauth);
 
 $app->post('/token', function (Request $request, Response $response) use ($oauth) {
-	$tokens = $oauth->handleTokenRequest(OAuth2\Request::createFromGlobals())->getResponseBody();
+	$tokens = $oauth->handleTokenRequest(OAuth2\Request::createFromGlobals())->getResponseBody();$request;
 	return $response->withJson(json_decode($tokens));
 });
 
@@ -45,6 +46,10 @@ $app->group('/api/v1', function () use ($app) {
         }
         
     })->add(new Validation(Validate::validateEditAccount()));
+
+    $app->delete('/account/omp/{ompID}/id/{accountID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteAccountID($request,$response,$args);
+	});
     
     $app->get('/account/omp/{ompID}/list', function(Request $request, Response $response, $args) {
 		return Search::searchAccount($request,$response,$args);

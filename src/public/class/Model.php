@@ -24,6 +24,8 @@ class Model extends General
         define("STATUS", "status");
         define("ACCOUNTROLE", "account_role");
         define("OMPID", "omp_id");
+        ## String Name ##
+        define("STRACCOUNTS", "accounts");
    }
 
     public function checkDuplicateAccount($req)
@@ -93,8 +95,8 @@ class Model extends General
         ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}'";
    		$sqlSearchAcc = "SELECT account_name,username,status,create_date FROM account $where";
 		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
-        $arr_result['accounts'] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
-        $arr_result['total'] = count($arr_result['accounts']);		
+        $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
+        $arr_result['total'] = count($arr_result[STRACCOUNTS]);		
 
         return $arr_result;
     }
@@ -106,9 +108,24 @@ class Model extends General
         ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
    		$sqlSearchAcc = "SELECT account_name,username,status,create_date FROM account WHERE id = '{$accountID}' $where";
 		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
-        $arr_result['accounts'] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
+        $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
 
         return $arr_result;
+    }
+
+    public function deleteAccountID($ompID,$accountID)
+    {
+        $ompID = $this->db_con->real_escape_string($ompID);
+        $accountID = $this->db_con->real_escape_string($accountID);
+        ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
+    	$sql = "DELETE FROM account WHERE id = '{$accountID}' $where";
+        $resultSearchAcc = $this->db_con->query($sql);
+        if (!mysqli_affected_rows($this->db_con)) {
+            $status = 601;
+        }else{
+            $status = 200;
+        }
+        return $status;
     }
     
 }
