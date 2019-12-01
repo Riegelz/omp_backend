@@ -25,6 +25,8 @@ $app->post('/token', function (Request $request, Response $response) use ($oauth
 
 $app->group('/api/v1', function () use ($app) {
 
+    #### Account API ####
+
     $app->post('/create_account', function (Request $request, Response $response) {
         
         $errors = Validate::exec($request, $response);
@@ -57,7 +59,43 @@ $app->group('/api/v1', function () use ($app) {
     
     $app->get('/account/omp/{ompID}/id/{accountID}', function(Request $request, Response $response, $args) {
 		return Search::searchAccountID($request,$response,$args);
-	});
+    });
+    
+    #### Group API ####
+
+    $app->post('/create_group', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Create::createGroup($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateCreateGroup()));
+
+    $app->post('/edit_group', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::editGroup($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditGroup()));
+
+    $app->delete('/group/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteGroupID($request,$response,$args);
+    });
+    
+    $app->get('/group/omp/{ompID}/list', function(Request $request, Response $response, $args) {
+		return Search::searchGroup($request,$response,$args);
+    });
+
+    $app->get('/group/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
+		return Search::searchGroupID($request,$response,$args);
+    });
 
 })->add($authen);
 

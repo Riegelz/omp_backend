@@ -6,22 +6,52 @@ use src\omp\Model as Model;
 
 class Search extends General
 {
+        public function __construct() {
+                ## String Name ##
+                define("SEARCHOMPID", "ompID");
+                define("SEARCHACCOUNTID", "accountID");
+                define("SEARCHGROUPID", "groupID");
+        }
+
 	public static function searchAccount($request,$response,$args)
 	{
-        $model = New Model();
-        $ompID = $args['ompID'];
-        ## Search account ##
-        $searchAccount = $model->searchAccount($ompID);
-        if(isset($searchAccount)) { return $response->withJson(General::responseFormat(200,$searchAccount)); }
-    }
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                ## Search account ##
+                $searchAccount = $model->searchAccount($ompID);
+                if(isset($searchAccount)) { return $response->withJson(General::responseFormat(200,$searchAccount)); }
+        }
     
-    public static function searchAccountID($request,$response,$args)
+        public static function searchAccountID($request,$response,$args)
+        {
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                $accountID = $args[SEARCHACCOUNTID];
+                ## Search account ##
+                $searchAccountID = $model->searchAccountID($ompID,$accountID);
+                if(isset($searchAccountID)) { return $response->withJson(General::responseFormat(200,$searchAccountID)); }
+        }
+
+        public static function searchGroup($request,$response,$args)
 	{
-        $model = New Model();
-        $ompID = $args['ompID'];
-        $accountID = $args['accountID'];
-        ## Search account ##
-        $searchAccountID = $model->searchAccountID($ompID,$accountID);
-        if(isset($searchAccountID)) { return $response->withJson(General::responseFormat(200,$searchAccountID)); }
-	}
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                ## Search account ##
+                $searchGroup = $model->searchGroup($ompID);
+                if(isset($searchGroup)) { return $response->withJson(General::responseFormat(200,$searchGroup)); }
+        }
+
+        public static function searchGroupID($request,$response,$args)
+        {
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                $groupID = $args[SEARCHGROUPID];
+                ## Search account ##
+                $searchGroupID = $model->searchGroupID($ompID,$groupID);
+                if(isset($searchGroupID)) { return $response->withJson(General::responseFormat(200,$searchGroupID)); }
+        }
 }

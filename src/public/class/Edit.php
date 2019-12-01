@@ -8,10 +8,19 @@ class Edit extends General
 {
 	public static function editAccount($request,$response)
 	{
-        $model = New Model();
-        $reqbody = $request->getParsedBody();
-        ## Edit account ##
-        $editAccount = $model->editAccount($reqbody);
-        if(isset($editAccount)) { return $response->withJson(General::responseFormat()); }
+                $model = New Model();
+                $reqbody = $request->getParsedBody();
+                ## Edit account ##
+                $editAccount = $model->editAccount($reqbody);
+                if(isset($editAccount)) { return $response->withJson(General::responseFormat()); }
+        }
+        
+        public static function editGroup($request,$response)
+	{
+                $model = New Model();
+                $reqbody = $request->getParsedBody();
+                ## Edit account ##
+                $editGroup = $model->editGroup($reqbody);
+                if(isset($editGroup)) { return $response->withJson(General::responseFormat()); }
 	}
 }
