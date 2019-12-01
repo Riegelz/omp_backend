@@ -17,6 +17,9 @@ class Validate extends General
 		define("JSONACCOUNTROLE", "account_role");
 		define("JSONGROUPNAME", "group_name");
 		define("JSONID", "id");
+		define("JSONGROUPID", "group_id");
+		define("JSONACCOUNTID", "account_id");
+		define("JSONGROUPROLE", "group_role");
     }
 
     public static function exec($request, $response)
@@ -72,6 +75,25 @@ class Validate extends General
 			JSONID => v::intVal()->notBlank(),
 			JSONGROUPNAME => v::stringType()->length(3, 100)->notBlank(),
 			JSONSTATUS => v::intVal()->between('0', '1'),
+		);
+	}
+
+	public static function validateAddGroupMember()
+	{
+		$self = New Self();
+		return array(
+			JSONGROUPID => v::intVal()->notBlank(),
+			JSONACCOUNTID => v::intVal()->notBlank(),
+			JSONGROUPROLE => v::intVal()->between('0', '2'),
+		);
+	}
+
+	public static function validateDelGroupMember()
+	{
+		$self = New Self();
+		return array(
+			JSONGROUPID => v::intVal()->notBlank(),
+			JSONACCOUNTID => v::intVal()->notBlank(),
 		);
 	}
 }

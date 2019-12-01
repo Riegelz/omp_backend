@@ -19,6 +19,10 @@ class General
 		$arr_response_text['601']="Can Not Delete Account";
 		$arr_response_text['602']="Duplicate Group";
 		$arr_response_text['603']="Can Not Delete Group";
+		$arr_response_text['604']="Duplicate Group Member";
+		$arr_response_text['605']="Account Have Not Register";
+		$arr_response_text['606']="Group Have Not Register";
+		$arr_response_text['607']="Can Not Delete Group Member";
 
 		return $arr_response_text[$arr_response['response_code']];
 		

@@ -5,6 +5,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use DavidePastore\Slim\Validation\Validation as Validation;
+use src\omp\Add as Add;
 use src\omp\Edit as Edit;
 use src\omp\Model as Model;
 use src\omp\Oauth as Oauth;
@@ -96,6 +97,32 @@ $app->group('/api/v1', function () use ($app) {
     $app->get('/group/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
 		return Search::searchGroupID($request,$response,$args);
     });
+
+    $app->get('/group/omp/{ompID}/id/{groupID}/member', function(Request $request, Response $response, $args) {
+		return Search::searchGroupMember($request,$response,$args);
+    });
+
+    $app->post('/add_group_member', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Add::addGroupMember($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateAddGroupMember()));
+
+    $app->post('/del_group_member', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Delete::delGroupMember($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateDelGroupMember()));
 
 })->add($authen);
 

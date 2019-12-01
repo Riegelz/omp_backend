@@ -27,10 +27,39 @@ class Model extends General
         define("GROUPNAME", "group_name");
         define("GROUPDESCRIPT", "group_description");
         define("ID", "id");
+        define("GROUPID", "group_id");
+        define("ACCOUNTID", "account_id");
+        define("GROUPROLE", "group_role");
         ## String Name ##
         define("STRACCOUNTS", "accounts");
         define("STRGROUPS", "groups");
         define("STRDATETIME", "Y-m-d H:i:s");
+    }
+
+    #### CHECK EXIST IN DB ####
+
+    public function checkExistAccount($req) {
+        $account_id = $this->db_con->real_escape_string($req[ACCOUNTID]);
+   		$sqlCheckExist = "SELECT * FROM account WHERE id = '{$account_id}'";
+		$resultCheckExist = $this->db_con->query($sqlCheckExist);
+        $arr_result = mysqli_fetch_array($resultCheckExist,MYSQLI_ASSOC);
+
+		if(!isset($arr_result)){
+            return $response_code = '605';
+		}
+		return true;
+    }
+
+    public function checkExistGroup($req) {
+        $group_id = $this->db_con->real_escape_string($req[GROUPID]);
+   		$sqlCheckExist = "SELECT * FROM `group` WHERE id = '{$group_id}'";
+		$resultCheckExist = $this->db_con->query($sqlCheckExist);
+        $arr_result = mysqli_fetch_array($resultCheckExist,MYSQLI_ASSOC);
+
+		if(!isset($arr_result)){
+            return $response_code = '606';
+		}
+		return true;
     }
 
     #### ACCOUNT MODEL ####
@@ -215,6 +244,68 @@ class Model extends General
         $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroup,MYSQLI_ASSOC);
 
         return $arr_result;
+    }
+
+    public function searchGroupMember($ompID,$groupID) {
+        $ompID = $this->db_con->real_escape_string($ompID);
+        $groupID = $this->db_con->real_escape_string($groupID);
+        ($ompID === "1") ? $where = "" : $where = " AND `group`.`omp_id` = '{$ompID}'";
+        $sqlSearchGroup .= "SELECT `group`.`group_name`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
+        $sqlSearchGroup .= "FROM `group_member`";
+        $sqlSearchGroup .= "LEFT JOIN `group`";
+        $sqlSearchGroup .= "ON `group_member`.`group_id` = `group`.`id`";
+        $sqlSearchGroup .= "LEFT JOIN `account`";
+        $sqlSearchGroup .= "ON `group_member`.`account_id` = `account`.`id`";
+   		$sqlSearchGroup .= "WHERE `group_member`.`group_id` = '{$groupID}' $where";
+		$resultSearchGroup = $this->db_con->query($sqlSearchGroup);
+        $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroup,MYSQLI_ASSOC);
+
+        return $arr_result;
+    }
+
+    public function checkDuplicateGroupMember($req) {
+        $group_id = $this->db_con->real_escape_string($req[GROUPID]);
+        $account_id = $this->db_con->real_escape_string($req[ACCOUNTID]);
+        $group_role = $this->db_con->real_escape_string($req[GROUPROLE]);
+   		$sqlCheckDup = "SELECT * FROM `group_member` WHERE `group_id` = '{$group_id}' AND `account_id` = '{$account_id}'";
+		$resultCheckDup = $this->db_con->query($sqlCheckDup);
+        $arr_result = mysqli_fetch_array($resultCheckDup,MYSQLI_ASSOC);
+
+		if(isset($arr_result)){
+			return $response_code = '604';
+		}
+		return true;
+    }
+
+    public function addGroupMember($req) {
+        $group_id = $this->db_con->real_escape_string($req[GROUPID]);
+        $account_id = $this->db_con->real_escape_string($req[ACCOUNTID]);
+        $group_role = $this->db_con->real_escape_string($req[GROUPROLE]);
+        $last_update = date(STRDATETIME);
+   
+        $sqlAddGroupMember = "INSERT INTO `group_member` 
+            (group_id, account_id, group_role, last_update)
+        VALUES (
+            '{$group_id}',
+            '{$account_id}',
+            '{$group_role}',
+            '{$last_update}'
+        )";
+        $result_add_group = $this->db_con->query($sqlAddGroupMember); 
+        return $this->db_con->insert_id;
+    }
+
+    public function delGroupMember($req) {
+        $group_id = $this->db_con->real_escape_string($req[GROUPID]);
+        $account_id = $this->db_con->real_escape_string($req[ACCOUNTID]);
+    	$sql = "DELETE FROM `group_member` WHERE group_id = '{$group_id}' AND account_id = '{$account_id}'";
+        $resultSearchAcc = $this->db_con->query($sql);
+        if (!mysqli_affected_rows($this->db_con)) {
+            $status = 607;
+        }else{
+            $status = 200;
+        }
+        return $status;
     }
     
 }

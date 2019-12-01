@@ -29,7 +29,7 @@ class Search extends General
                 $model = New Model();
                 $ompID = $args[SEARCHOMPID];
                 $accountID = $args[SEARCHACCOUNTID];
-                ## Search account ##
+                ## Search account ID ##
                 $searchAccountID = $model->searchAccountID($ompID,$accountID);
                 if(isset($searchAccountID)) { return $response->withJson(General::responseFormat(200,$searchAccountID)); }
         }
@@ -39,7 +39,7 @@ class Search extends General
                 $self = New Self();
                 $model = New Model();
                 $ompID = $args[SEARCHOMPID];
-                ## Search account ##
+                ## Search group ##
                 $searchGroup = $model->searchGroup($ompID);
                 if(isset($searchGroup)) { return $response->withJson(General::responseFormat(200,$searchGroup)); }
         }
@@ -50,8 +50,19 @@ class Search extends General
                 $model = New Model();
                 $ompID = $args[SEARCHOMPID];
                 $groupID = $args[SEARCHGROUPID];
-                ## Search account ##
+                ## Search group ID ##
                 $searchGroupID = $model->searchGroupID($ompID,$groupID);
                 if(isset($searchGroupID)) { return $response->withJson(General::responseFormat(200,$searchGroupID)); }
+        }
+
+        public static function searchGroupMember($request,$response,$args)
+        {
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                $groupID = $args[SEARCHGROUPID];
+                ## Search group member ##
+                $searchGroupMember = $model->searchGroupMember($ompID,$groupID);
+                if(isset($searchGroupMember)) { return $response->withJson(General::responseFormat(200,$searchGroupMember)); }
         }
 }
