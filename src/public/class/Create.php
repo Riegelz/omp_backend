@@ -2,13 +2,15 @@
 
 namespace src\omp;
 
-use src\omp\Model as Model;
+use src\omp\model\Group as Group;
+use src\omp\model\Account as Account;
+use src\omp\model\Product as Product;
 
 class Create extends General
 {
         public static function createAccount($request,$response)
 	{
-                $model = New Model();
+                $model = New Account();
                 $reqbody = $request->getParsedBody();
                 ## check duplicate account in db ##
                 $checkDuplicateAccount = $model->checkDuplicateAccount($reqbody); 
@@ -20,7 +22,7 @@ class Create extends General
     
         public static function createGroup($request,$response)
 	{
-                $model = New Model();
+                $model = New Group();
                 $reqbody = $request->getParsedBody();
                 ## check duplicate group in db ##
                 $checkDuplicateGroup = $model->checkDuplicateGroup($reqbody); 
@@ -32,7 +34,7 @@ class Create extends General
         
         public static function createProduct($request,$response)
 	{
-                $model = New Model();
+                $model = New Product();
                 $reqbody = $request->getParsedBody();
                 ## check duplicate product in db ##
                 $checkDuplicateProduct = $model->checkDuplicateProduct($reqbody); 

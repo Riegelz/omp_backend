@@ -12,6 +12,7 @@
     "autoload": {
     	"psr-4": {
             "src\\omp\\": "src/public/class",
+            "src\\omp\\model\\": "src/public/model",
             "src\\": "src/public/"
 	    }
     }

@@ -2,14 +2,22 @@
 
 namespace src\omp;
 
-use src\omp\Model as Model;
+use src\omp\model\Group as Group;
+use src\omp\model\Account as Account;
+use src\omp\model\Product as Product;
 
 class Delete extends General
 {   
+    public function __construct() {
+        ## String Name ##
+        define("STROMPID", "ompID");
+    }
+
     public static function deleteAccountID($request,$response,$args)
 	{
-        $model = New Model();
-        $ompID = $args['ompID'];
+        $self = New Self();
+        $model = New Account();
+        $ompID = $args[STROMPID];
         $accountID = $args['accountID'];
         ## Search account ##
         $deleteAccountID = $model->deleteAccountID($ompID,$accountID);
@@ -19,8 +27,9 @@ class Delete extends General
     
     public static function deleteGroupID($request,$response,$args)
 	{
-        $model = New Model();
-        $ompID = $args['ompID'];
+        $self = New Self();
+        $model = New Group();
+        $ompID = $args[STROMPID];
         $groupID = $args['groupID'];
         ## Search account ##
         $deleteGroupID = $model->deleteGroupID($ompID,$groupID);
@@ -29,7 +38,7 @@ class Delete extends General
     
     public static function delGroupMember($request,$response)
     {
-        $model = New Model();
+        $model = New Group();
         $reqbody = $request->getParsedBody();
         ## Check account have in DB ##
         $checkExistAccount = $model->checkExistAccount($reqbody); 
@@ -44,8 +53,9 @@ class Delete extends General
 
     public static function deleteProductID($request,$response,$args)
 	{
-        $model = New Model();
-        $ompID = $args['ompID'];
+        $self = New Self();
+        $model = New Product();
+        $ompID = $args[STROMPID];
         $productID = $args['productID'];
         ## Search account ##
         $deleteProductID = $model->deleteProductID($ompID,$productID);

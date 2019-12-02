@@ -2,7 +2,9 @@
 
 namespace src\omp;
 
-use src\omp\Model as Model;
+use src\omp\model\Group as Group;
+use src\omp\model\Account as Account;
+use src\omp\model\Product as Product;
 
 class Search extends General
 {
@@ -17,7 +19,7 @@ class Search extends General
 	public static function searchAccount($request,$response,$args)
 	{
                 $self = New Self();
-                $model = New Model();
+                $model = New Account();
                 $ompID = $args[SEARCHOMPID];
                 ## Search account ##
                 $searchAccount = $model->searchAccount($ompID);
@@ -27,7 +29,7 @@ class Search extends General
         public static function searchAccountID($request,$response,$args)
         {
                 $self = New Self();
-                $model = New Model();
+                $model = New Account();
                 $ompID = $args[SEARCHOMPID];
                 $accountID = $args[SEARCHACCOUNTID];
                 ## Search account ID ##
@@ -38,7 +40,7 @@ class Search extends General
         public static function searchGroup($request,$response,$args)
 	{
                 $self = New Self();
-                $model = New Model();
+                $model = New Group();
                 $ompID = $args[SEARCHOMPID];
                 ## Search group ##
                 $searchGroup = $model->searchGroup($ompID);
@@ -48,7 +50,7 @@ class Search extends General
         public static function searchGroupID($request,$response,$args)
         {
                 $self = New Self();
-                $model = New Model();
+                $model = New Group();
                 $ompID = $args[SEARCHOMPID];
                 $groupID = $args[SEARCHGROUPID];
                 ## Search group ID ##
@@ -59,7 +61,7 @@ class Search extends General
         public static function searchGroupMember($request,$response,$args)
         {
                 $self = New Self();
-                $model = New Model();
+                $model = New Group();
                 $ompID = $args[SEARCHOMPID];
                 $groupID = $args[SEARCHGROUPID];
                 ## Search group member ##
@@ -70,7 +72,7 @@ class Search extends General
         public static function searchProductList($request,$response,$args)
 	{
                 $self = New Self();
-                $model = New Model();
+                $model = New Product();
                 $ompID = $args[SEARCHOMPID];
                 ## Search product ##
                 $searchProductList = $model->searchProductList($ompID,$groupID);
@@ -80,7 +82,7 @@ class Search extends General
         public static function searchProductListByGroupID($request,$response,$args)
 	{
                 $self = New Self();
-                $model = New Model();
+                $model = New Product();
                 $ompID = $args[SEARCHOMPID];
                 $groupID = $args[SEARCHGROUPID];
                 ## Search product ##
@@ -91,7 +93,7 @@ class Search extends General
         public static function searchProductListByProductID($request,$response,$args)
 	{
                 $self = New Self();
-                $model = New Model();
+                $model = New Product();
                 $ompID = $args[SEARCHOMPID];
                 $productID = $args[SEARCHPRODUCTID];
                 ## Search product ##

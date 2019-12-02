@@ -7,13 +7,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use DavidePastore\Slim\Validation\Validation as Validation;
 use src\omp\Add as Add;
 use src\omp\Edit as Edit;
-use src\omp\Model as Model;
 use src\omp\Oauth as Oauth;
 use src\omp\Search as Search;
 use src\omp\Create as Create;
 use src\omp\Delete as Delete;
 use src\omp\General as General;
 use src\omp\Validate as Validate;
+use src\omp\model\Group as Group;
+use src\omp\model\Account as Account;
+use src\omp\model\Product as Product;
 
 $oauth = src\omp\Oauth::oauthConfig();
 $app = new \Slim\App(['settings' => ['displayErrorDetails' => getenv('DEBUG_MODE')]]);
