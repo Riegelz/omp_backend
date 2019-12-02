@@ -20,6 +20,9 @@ class Validate extends General
 		define("JSONGROUPID", "group_id");
 		define("JSONACCOUNTID", "account_id");
 		define("JSONGROUPROLE", "group_role");
+		define("JSONPRODUCTNAME", "product_name");
+		define("JSONPRODUCTPRICE", "product_price");
+		define("JSONPRODUCTGROUPID", "product_group_id");
     }
 
     public static function exec($request, $response)
@@ -94,6 +97,31 @@ class Validate extends General
 		return array(
 			JSONGROUPID => v::intVal()->notBlank(),
 			JSONACCOUNTID => v::intVal()->notBlank(),
+		);
+	}
+
+	public static function validateCreateProduct()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONPRODUCTNAME => v::stringType()->length(3, 100)->notBlank(),
+			JSONPRODUCTPRICE => v::intVal()->length(1, 10)->notBlank(),
+			JSONPRODUCTGROUPID => v::intVal()->notBlank(),
+			JSONSTATUS => v::intVal()->between('0', '1'),
+		);
+	}
+
+	public static function validateEditProduct()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONID => v::intVal()->notBlank(),
+			JSONPRODUCTNAME => v::stringType()->length(3, 100)->notBlank(),
+			JSONPRODUCTPRICE => v::intVal()->length(1, 10)->notBlank(),
+			JSONPRODUCTGROUPID => v::intVal()->notBlank(),
+			JSONSTATUS => v::intVal()->between('0', '1'),
 		);
 	}
 }

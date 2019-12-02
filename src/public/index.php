@@ -24,7 +24,7 @@ $app->post('/token', function (Request $request, Response $response) use ($oauth
 	return $response->withJson(json_decode($tokens));
 });
 
-$app->group('/api/v1', function () use ($app) {
+$app->group('/api/v1/account', function () use ($app) {
 
     #### Account API ####
 
@@ -50,18 +50,22 @@ $app->group('/api/v1', function () use ($app) {
         
     })->add(new Validation(Validate::validateEditAccount()));
 
-    $app->delete('/account/omp/{ompID}/id/{accountID}', function(Request $request, Response $response, $args) {
+    $app->delete('/omp/{ompID}/id/{accountID}', function(Request $request, Response $response, $args) {
 		return Delete::deleteAccountID($request,$response,$args);
 	});
     
-    $app->get('/account/omp/{ompID}/list', function(Request $request, Response $response, $args) {
+    $app->get('/omp/{ompID}/account_list', function(Request $request, Response $response, $args) {
 		return Search::searchAccount($request,$response,$args);
     });
     
-    $app->get('/account/omp/{ompID}/id/{accountID}', function(Request $request, Response $response, $args) {
+    $app->get('/omp/{ompID}/id/{accountID}', function(Request $request, Response $response, $args) {
 		return Search::searchAccountID($request,$response,$args);
     });
-    
+
+})->add($authen);
+
+$app->group('/api/v1/group', function () use ($app) {
+
     #### Group API ####
 
     $app->post('/create_group', function (Request $request, Response $response) {
@@ -86,19 +90,19 @@ $app->group('/api/v1', function () use ($app) {
         
     })->add(new Validation(Validate::validateEditGroup()));
 
-    $app->delete('/group/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
+    $app->delete('/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
 		return Delete::deleteGroupID($request,$response,$args);
     });
     
-    $app->get('/group/omp/{ompID}/list', function(Request $request, Response $response, $args) {
+    $app->get('/omp/{ompID}/group_list', function(Request $request, Response $response, $args) {
 		return Search::searchGroup($request,$response,$args);
     });
 
-    $app->get('/group/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
+    $app->get('/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
 		return Search::searchGroupID($request,$response,$args);
     });
 
-    $app->get('/group/omp/{ompID}/id/{groupID}/member', function(Request $request, Response $response, $args) {
+    $app->get('/omp/{ompID}/id/{groupID}/member', function(Request $request, Response $response, $args) {
 		return Search::searchGroupMember($request,$response,$args);
     });
 
@@ -123,6 +127,50 @@ $app->group('/api/v1', function () use ($app) {
         }
         
     })->add(new Validation(Validate::validateDelGroupMember()));
+
+})->add($authen);
+
+$app->group('/api/v1/product', function () use ($app) {
+
+    #### Product API ####
+
+    $app->post('/create_product', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Create::createProduct($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateCreateProduct()));
+
+    $app->post('/edit_product', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::editProduct($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditProduct()));
+
+    $app->delete('/omp/{ompID}/id/{productID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteProductID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/product_list', function(Request $request, Response $response, $args) {
+		return Search::searchProductList($request,$response,$args);
+    });
+    
+    $app->get('/omp/{ompID}/product_list/gid/{groupID}', function(Request $request, Response $response, $args) {
+		return Search::searchProductListByGroupID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/product_list/pid/{productID}', function(Request $request, Response $response, $args) {
+		return Search::searchProductListByProductID($request,$response,$args);
+    });
 
 })->add($authen);
 

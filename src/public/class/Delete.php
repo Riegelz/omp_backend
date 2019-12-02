@@ -13,6 +13,7 @@ class Delete extends General
         $accountID = $args['accountID'];
         ## Search account ##
         $deleteAccountID = $model->deleteAccountID($ompID,$accountID);
+        if($deleteAccountID === 200) { $model->deleteAccountAllGroup($accountID); }
         if(isset($deleteAccountID)) { return $response->withJson(General::responseFormat($deleteAccountID)); }
     }
     
@@ -39,5 +40,15 @@ class Delete extends General
         ## Del Group member ##
         $delGroupMember = $model->delGroupMember($reqbody);
         if(isset($delGroupMember)) { return $response->withJson(General::responseFormat($delGroupMember)); }
+    }
+
+    public static function deleteProductID($request,$response,$args)
+	{
+        $model = New Model();
+        $ompID = $args['ompID'];
+        $productID = $args['productID'];
+        ## Search account ##
+        $deleteProductID = $model->deleteProductID($ompID,$productID);
+        if(isset($deleteProductID)) { return $response->withJson(General::responseFormat($deleteProductID)); }
     }
 }

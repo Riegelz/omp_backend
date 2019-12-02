@@ -22,5 +22,14 @@ class Edit extends General
                 ## Edit account ##
                 $editGroup = $model->editGroup($reqbody);
                 if(isset($editGroup)) { return $response->withJson(General::responseFormat()); }
-	}
+        }
+        
+        public static function editProduct($request,$response)
+	{
+                $model = New Model();
+                $reqbody = $request->getParsedBody();
+                ## Edit account ##
+                $editProduct = $model->editProduct($reqbody);
+                if(isset($editProduct)) { return $response->withJson(General::responseFormat()); }
+        }
 }

@@ -23,6 +23,8 @@ class General
 		$arr_response_text['605']="Account Have Not Register";
 		$arr_response_text['606']="Group Have Not Register";
 		$arr_response_text['607']="Can Not Delete Group Member";
+		$arr_response_text['608']="Duplicate Product";
+		$arr_response_text['609']="Can Not Delete Product";
 
 		return $arr_response_text[$arr_response['response_code']];
 		

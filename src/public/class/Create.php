@@ -28,5 +28,17 @@ class Create extends General
                 // ## Create group ##
                 $createNewGroup = $model->createNewGroup($reqbody);
                 if(isset($createNewGroup)) { return $response->withJson(General::responseFormat(200,["id" => $createNewGroup])); }
-	}
+        }
+        
+        public static function createProduct($request,$response)
+	{
+                $model = New Model();
+                $reqbody = $request->getParsedBody();
+                ## check duplicate product in db ##
+                $checkDuplicateProduct = $model->checkDuplicateProduct($reqbody); 
+                if($checkDuplicateProduct !== true) { return $response->withJson(General::responseFormat($checkDuplicateProduct)); }
+                ## Create product ##
+                $createNewProduct = $model->createNewProduct($reqbody);
+                if(isset($createNewProduct)) { return $response->withJson(General::responseFormat(200,["id" => $createNewProduct])); }
+        }
 }

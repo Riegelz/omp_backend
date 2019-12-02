@@ -11,6 +11,7 @@ class Search extends General
                 define("SEARCHOMPID", "ompID");
                 define("SEARCHACCOUNTID", "accountID");
                 define("SEARCHGROUPID", "groupID");
+                define("SEARCHPRODUCTID", "productID");
         }
 
 	public static function searchAccount($request,$response,$args)
@@ -64,5 +65,37 @@ class Search extends General
                 ## Search group member ##
                 $searchGroupMember = $model->searchGroupMember($ompID,$groupID);
                 if(isset($searchGroupMember)) { return $response->withJson(General::responseFormat(200,$searchGroupMember)); }
+        }
+
+        public static function searchProductList($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                ## Search product ##
+                $searchProductList = $model->searchProductList($ompID,$groupID);
+                if(isset($searchProductList)) { return $response->withJson(General::responseFormat(200,$searchProductList)); }
+        }
+
+        public static function searchProductListByGroupID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                $groupID = $args[SEARCHGROUPID];
+                ## Search product ##
+                $searchProductListByGroupID = $model->searchProductListByGroupID($ompID,$groupID);
+                if(isset($searchProductListByGroupID)) { return $response->withJson(General::responseFormat(200,$searchProductListByGroupID)); }
+        }
+
+        public static function searchProductListByProductID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Model();
+                $ompID = $args[SEARCHOMPID];
+                $productID = $args[SEARCHPRODUCTID];
+                ## Search product ##
+                $searchProductListByProductID = $model->searchProductListByProductID($ompID,$productID);
+                if(isset($searchProductListByProductID)) { return $response->withJson(General::responseFormat(200,$searchProductListByProductID)); }
         }
 }
