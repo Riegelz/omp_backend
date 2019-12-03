@@ -25,6 +25,9 @@ class General
 		$arr_response_text['607']="Can Not Delete Group Member";
 		$arr_response_text['608']="Duplicate Product";
 		$arr_response_text['609']="Can Not Delete Product";
+		$arr_response_text['610']="Product Have Not Register";
+		$arr_response_text['611']="Duplicate Promotion";
+		$arr_response_text['612']="Can Not Delete Promotion";
 
 		return $arr_response_text[$arr_response['response_code']];
 		

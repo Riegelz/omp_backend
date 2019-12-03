@@ -176,4 +176,48 @@ $app->group('/api/v1/product', function () use ($app) {
 
 })->add($authen);
 
+$app->group('/api/v1/promotion', function () use ($app) {
+
+    #### Promotion API ####
+
+    $app->post('/create_promotion', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Create::createPromotion($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateCreatePromotion()));
+
+    $app->post('/edit_promotion', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::editPromotion($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditPromotion()));
+
+    $app->delete('/omp/{ompID}/id/{promotionID}', function(Request $request, Response $response, $args) {
+		return Delete::deletePromotionID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/promotion_list', function(Request $request, Response $response, $args) {
+		return Search::searchPromotionList($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/promotion_list/pid/{promotionID}', function(Request $request, Response $response, $args) {
+		return Search::searchPromotionListByPromotionID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/promotion_list/gid/{groupID}', function(Request $request, Response $response, $args) {
+		return Search::searchPromotionListByGroupID($request,$response,$args);
+    });
+
+})->add($authen);
+
 $app->run();

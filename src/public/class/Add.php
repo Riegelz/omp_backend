@@ -2,7 +2,7 @@
 
 namespace src\omp;
 
-use src\omp\Model as Model;
+use src\omp\model\Group as Group;
 
 class Add extends General
 {
@@ -12,7 +12,7 @@ class Add extends General
 
         public static function addGroupMember($request,$response)
 	    {
-            $model = New Model();
+            $model = New Group();
             $reqbody = $request->getParsedBody();
             ## Check account have in DB ##
             $checkExistAccount = $model->checkExistAccount($reqbody); 

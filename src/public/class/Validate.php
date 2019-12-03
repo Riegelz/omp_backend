@@ -20,9 +20,14 @@ class Validate extends General
 		define("JSONGROUPID", "group_id");
 		define("JSONACCOUNTID", "account_id");
 		define("JSONGROUPROLE", "group_role");
+		define("JSONPRODUCTID", "product_id");
 		define("JSONPRODUCTNAME", "product_name");
 		define("JSONPRODUCTPRICE", "product_price");
 		define("JSONPRODUCTGROUPID", "product_group_id");
+		define("JSONPROMOTIONNAME", "promotion_name");
+		define("JSONPROMOTIONAMOUNT", "promotion_product_amount");
+		define("JSONPROMOTIONPRICE", "promotion_price");
+		
     }
 
     public static function exec($request, $response)
@@ -121,6 +126,35 @@ class Validate extends General
 			JSONPRODUCTNAME => v::stringType()->length(3, 100)->notBlank(),
 			JSONPRODUCTPRICE => v::intVal()->length(1, 10)->notBlank(),
 			JSONPRODUCTGROUPID => v::intVal()->notBlank(),
+			JSONSTATUS => v::intVal()->between('0', '1'),
+		);
+	}
+
+	public static function validateCreatePromotion()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal()->notBlank(),
+			JSONPRODUCTID => v::intVal()->notBlank(),
+			JSONPROMOTIONNAME => v::stringType()->length(3, 100)->notBlank(),
+			JSONPROMOTIONAMOUNT => v::intVal()->length(1, 10)->notBlank(),
+			JSONPROMOTIONPRICE => v::intVal()->length(1, 10)->notBlank(),
+			JSONSTATUS => v::intVal()->between('0', '1'),
+		);
+	}
+
+	public static function validateEditPromotion()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal()->notBlank(),
+			JSONPRODUCTID => v::intVal()->notBlank(),
+			JSONPROMOTIONNAME => v::stringType()->length(3, 100)->notBlank(),
+			JSONPROMOTIONAMOUNT => v::intVal()->length(1, 10)->notBlank(),
+			JSONPROMOTIONPRICE => v::intVal()->length(1, 10)->notBlank(),
 			JSONSTATUS => v::intVal()->between('0', '1'),
 		);
 	}

@@ -5,6 +5,7 @@ namespace src\omp;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
+use src\omp\model\Promotion as Promotion;
 
 class Create extends General
 {
@@ -42,5 +43,23 @@ class Create extends General
                 ## Create product ##
                 $createNewProduct = $model->createNewProduct($reqbody);
                 if(isset($createNewProduct)) { return $response->withJson(General::responseFormat(200,["id" => $createNewProduct])); }
+        }
+
+        public static function createPromotion($request,$response)
+	{
+                $model = New Promotion();
+                $reqbody = $request->getParsedBody();
+                ## Check group have in DB ##
+                $checkExistGroup = $model->checkExistGroup($reqbody); 
+                if($checkExistGroup !== true) { return $response->withJson(General::responseFormat($checkExistGroup)); }
+                ## Check product have in DB ##
+                $checkExistProduct = $model->checkExistProduct($reqbody); 
+                if($checkExistProduct !== true) { return $response->withJson(General::responseFormat($checkExistProduct)); }
+                ## check duplicate promotion in db ##
+                $checkDuplicatePromotion = $model->checkDuplicatePromotion($reqbody); 
+                if($checkDuplicatePromotion !== true) { return $response->withJson(General::responseFormat($checkDuplicatePromotion)); }
+                ## Create promotion ##
+                $createNewPromotion = $model->createNewPromotion($reqbody);
+                if(isset($createNewPromotion)) { return $response->withJson(General::responseFormat(200,["id" => $createNewPromotion])); }
         }
 }

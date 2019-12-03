@@ -86,7 +86,7 @@ class Product extends General
         $status = $this->db_con->real_escape_string($req[STATUS]);
         $currentDate = date(STRDATETIME);
 
-   		echo $sqlEditProduct = "UPDATE `product` 
+   		$sqlEditProduct = "UPDATE `product` 
    		SET product_name = '{$product_name}',
             product_prefix = '{$product_prefix}',
             product_price = '{$product_price}',

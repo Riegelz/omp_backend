@@ -5,6 +5,7 @@ namespace src\omp;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
+use src\omp\model\Promotion as Promotion;
 
 class Edit extends General
 {
@@ -21,7 +22,7 @@ class Edit extends General
 	{
                 $model = New Group();
                 $reqbody = $request->getParsedBody();
-                ## Edit account ##
+                ## Edit group ##
                 $editGroup = $model->editGroup($reqbody);
                 if(isset($editGroup)) { return $response->withJson(General::responseFormat()); }
         }
@@ -30,8 +31,17 @@ class Edit extends General
 	{
                 $model = New Product();
                 $reqbody = $request->getParsedBody();
-                ## Edit account ##
+                ## Edit product ##
                 $editProduct = $model->editProduct($reqbody);
                 if(isset($editProduct)) { return $response->withJson(General::responseFormat()); }
+        }
+
+        public static function editPromotion($request,$response)
+	{
+                $model = New Promotion();
+                $reqbody = $request->getParsedBody();
+                ## Edit promotion ##
+                $editPromotion = $model->editPromotion($reqbody);
+                if(isset($editPromotion)) { return $response->withJson(General::responseFormat()); }
         }
 }

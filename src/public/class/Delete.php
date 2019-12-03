@@ -5,6 +5,7 @@ namespace src\omp;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
+use src\omp\model\Promotion as Promotion;
 
 class Delete extends General
 {   
@@ -31,7 +32,7 @@ class Delete extends General
         $model = New Group();
         $ompID = $args[STROMPID];
         $groupID = $args['groupID'];
-        ## Search account ##
+        ## Delete account ##
         $deleteGroupID = $model->deleteGroupID($ompID,$groupID);
         if(isset($deleteGroupID)) { return $response->withJson(General::responseFormat($deleteGroupID)); }
     }
@@ -57,8 +58,19 @@ class Delete extends General
         $model = New Product();
         $ompID = $args[STROMPID];
         $productID = $args['productID'];
-        ## Search account ##
+        ## Delete product ##
         $deleteProductID = $model->deleteProductID($ompID,$productID);
         if(isset($deleteProductID)) { return $response->withJson(General::responseFormat($deleteProductID)); }
+    }
+
+    public static function deletePromotionID($request,$response,$args)
+	{
+        $self = New Self();
+        $model = New Promotion();
+        $ompID = $args[STROMPID];
+        $promotionID = $args['promotionID'];
+        ## Delete promotion ##
+        $deletePromotionID = $model->deletePromotionID($ompID,$promotionID);
+        if(isset($deletePromotionID)) { return $response->withJson(General::responseFormat($deletePromotionID)); }
     }
 }

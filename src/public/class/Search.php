@@ -5,6 +5,7 @@ namespace src\omp;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
+use src\omp\model\Promotion as Promotion;
 
 class Search extends General
 {
@@ -14,6 +15,7 @@ class Search extends General
                 define("SEARCHACCOUNTID", "accountID");
                 define("SEARCHGROUPID", "groupID");
                 define("SEARCHPRODUCTID", "productID");
+                define("SEARCHPROMOTIONID", "promotionID");
         }
 
 	public static function searchAccount($request,$response,$args)
@@ -99,5 +101,37 @@ class Search extends General
                 ## Search product ##
                 $searchProductListByProductID = $model->searchProductListByProductID($ompID,$productID);
                 if(isset($searchProductListByProductID)) { return $response->withJson(General::responseFormat(200,$searchProductListByProductID)); }
+        }
+
+        public static function searchPromotionList($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Promotion();
+                $ompID = $args[SEARCHOMPID];
+                ## Search promotion ##
+                $searchPromotionList = $model->searchPromotionList($ompID,$groupID);
+                if(isset($searchPromotionList)) { return $response->withJson(General::responseFormat(200,$searchPromotionList)); }
+        }
+
+        public static function searchPromotionListByPromotionID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Promotion();
+                $ompID = $args[SEARCHOMPID];
+                $promotionID = $args[SEARCHPROMOTIONID];
+                ## Search promotion ##
+                $searchPromotionListByPromotionID = $model->searchPromotionListByPromotionID($ompID,$promotionID);
+                if(isset($searchPromotionListByPromotionID)) { return $response->withJson(General::responseFormat(200,$searchPromotionListByPromotionID)); }
+        }
+
+        public static function searchPromotionListByGroupID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Promotion();
+                $ompID = $args[SEARCHOMPID];
+                $groupID = $args[SEARCHGROUPID];
+                ## Search promotion ##
+                $searchPromotionListByGroupID = $model->searchPromotionListByGroupID($ompID,$groupID);
+                if(isset($searchPromotionListByGroupID)) { return $response->withJson(General::responseFormat(200,$searchPromotionListByGroupID)); }
         }
 }
