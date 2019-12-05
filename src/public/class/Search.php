@@ -49,6 +49,17 @@ class Search extends General
                 if(isset($searchGroup)) { return $response->withJson(General::responseFormat(200,$searchGroup)); }
         }
 
+        public static function searchGroupByAccountID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Group();
+                $ompID = $args[SEARCHOMPID];
+                $accountID = $args[SEARCHACCOUNTID];
+                ## Search group ##
+                $searchGroupByAccountID = $model->searchGroupByAccountID($ompID,$accountID);
+                if(isset($searchGroupByAccountID)) { return $response->withJson(General::responseFormat(200,$searchGroupByAccountID)); }
+        }
+
         public static function searchGroupID($request,$response,$args)
         {
                 $self = New Self();

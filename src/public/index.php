@@ -100,6 +100,10 @@ $app->group('/api/v1/group', function () use ($app) {
 		return Search::searchGroup($request,$response,$args);
     });
 
+    $app->get('/omp/{ompID}/group_list/aid/{accountID}', function(Request $request, Response $response, $args) {
+		return Search::searchGroupByAccountID($request,$response,$args);
+    });
+
     $app->get('/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
 		return Search::searchGroupID($request,$response,$args);
     });
@@ -217,6 +221,22 @@ $app->group('/api/v1/promotion', function () use ($app) {
     $app->get('/omp/{ompID}/promotion_list/gid/{groupID}', function(Request $request, Response $response, $args) {
 		return Search::searchPromotionListByGroupID($request,$response,$args);
     });
+
+})->add($authen);
+
+$app->group('/api/v1/cost', function () use ($app) {
+
+    #### Cost API ####
+    $app->post('/add_logistics_cost', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Add::AddLogisticsCost($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateAddLogisticsCost()));
 
 })->add($authen);
 

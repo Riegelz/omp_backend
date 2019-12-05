@@ -27,6 +27,10 @@ class Validate extends General
 		define("JSONPROMOTIONNAME", "promotion_name");
 		define("JSONPROMOTIONAMOUNT", "promotion_product_amount");
 		define("JSONPROMOTIONPRICE", "promotion_price");
+		define("JSONCOSTLOGISTICSID", "logistics_id");
+		define("JSONCOSTLOGISTICSCOST", "logistics_cost");
+		define("JSONCOSTLOGISTICSBYID", "logistics_by_account_id");
+		define("JSONDATETIME", "datetime");
 		
     }
 
@@ -156,6 +160,20 @@ class Validate extends General
 			JSONPROMOTIONAMOUNT => v::intVal()->length(1, 10)->notBlank(),
 			JSONPROMOTIONPRICE => v::intVal()->length(1, 10)->notBlank(),
 			JSONSTATUS => v::intVal()->between('0', '1'),
+		);
+	}
+
+	public static function validateAddLogisticsCost()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal(),
+			JSONPRODUCTID => v::intVal(),
+			JSONCOSTLOGISTICSID => v::intVal()->notBlank(),
+			JSONCOSTLOGISTICSCOST => v::intVal()->length(1, 10)->notBlank(),
+			JSONCOSTLOGISTICSBYID => v::intVal()->notBlank(),
+			JSONDATETIME => v::date('Y-m-d H:i:s')->notBlank(),
 		);
 	}
 }

@@ -28,6 +28,9 @@ class General
 		$arr_response_text['610']="Product Have Not Register";
 		$arr_response_text['611']="Duplicate Promotion";
 		$arr_response_text['612']="Can Not Delete Promotion";
+		$arr_response_text['613']="Logistics Have Not Register";
+		$arr_response_text['614']="User Have Not In This Group";
+		$arr_response_text['615']="Product Have Not Registered In Group";
 
 		return $arr_response_text[$arr_response['response_code']];
 		
