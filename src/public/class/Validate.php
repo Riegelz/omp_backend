@@ -176,4 +176,19 @@ class Validate extends General
 			JSONDATETIME => v::date('Y-m-d H:i:s')->notBlank(),
 		);
 	}
+
+	public static function validateEditLogisticsCost()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal(),
+			JSONPRODUCTID => v::intVal(),
+			JSONCOSTLOGISTICSID => v::intVal()->notBlank(),
+			JSONCOSTLOGISTICSCOST => v::intVal()->length(1, 10)->notBlank(),
+			JSONCOSTLOGISTICSBYID => v::intVal()->notBlank(),
+			JSONDATETIME => v::date('Y-m-d H:i:s')->notBlank(),
+		);
+	}
 }

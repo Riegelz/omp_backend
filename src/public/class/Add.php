@@ -56,6 +56,6 @@ class Add extends General
 
             ## Add Cost in DB ##
             $AddLogisticsCost = $model->AddLogisticsCost($reqbody);
-            if(isset($AddLogisticsCost)) { return $response->withJson(General::responseFormat(200)); }
+            if(isset($AddLogisticsCost)) { return $response->withJson(General::responseFormat(200,["id" => $AddLogisticsCost])); }
         }
 }

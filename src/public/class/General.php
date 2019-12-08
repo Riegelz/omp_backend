@@ -31,6 +31,8 @@ class General
 		$arr_response_text['613']="Logistics Have Not Register";
 		$arr_response_text['614']="User Have Not In This Group";
 		$arr_response_text['615']="Product Have Not Registered In Group";
+		$arr_response_text['616']="User Have Not Permission";
+		$arr_response_text['617']="Can Not Delete Logistic Cost";
 
 		return $arr_response_text[$arr_response['response_code']];
 		

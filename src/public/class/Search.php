@@ -2,6 +2,7 @@
 
 namespace src\omp;
 
+use src\omp\model\Cost as Cost;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
@@ -16,6 +17,7 @@ class Search extends General
                 define("SEARCHGROUPID", "groupID");
                 define("SEARCHPRODUCTID", "productID");
                 define("SEARCHPROMOTIONID", "promotionID");
+                define("SEARCHLOGISTICID", "logisticcostID");
         }
 
 	public static function searchAccount($request,$response,$args)
@@ -144,5 +146,26 @@ class Search extends General
                 ## Search promotion ##
                 $searchPromotionListByGroupID = $model->searchPromotionListByGroupID($ompID,$groupID);
                 if(isset($searchPromotionListByGroupID)) { return $response->withJson(General::responseFormat(200,$searchPromotionListByGroupID)); }
+        }
+
+        public static function searchLogisticCostList($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Cost();
+                $ompID = $args[SEARCHOMPID];
+                ## Search cost ##
+                $searchLogisticCostList = $model->searchLogisticCostList($ompID);
+                if(isset($searchLogisticCostList)) { return $response->withJson(General::responseFormat(200,$searchLogisticCostList)); }
+        }
+
+        public static function searchLogisticCostListByID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Cost();
+                $ompID = $args[SEARCHOMPID];
+                $logisticcostID = $args[SEARCHLOGISTICID];
+                ## Search cost ##
+                $searchLogisticCostListByID = $model->searchLogisticCostListByID($ompID,$logisticcostID);
+                if(isset($searchLogisticCostListByID)) { return $response->withJson(General::responseFormat(200,$searchLogisticCostListByID)); }
         }
 }

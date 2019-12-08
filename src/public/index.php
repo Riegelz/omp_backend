@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use DavidePastore\Slim\Validation\Validation as Validation;
 use src\omp\Add as Add;
 use src\omp\Edit as Edit;
+use src\omp\Rule as Rule;
 use src\omp\Oauth as Oauth;
 use src\omp\Search as Search;
 use src\omp\Create as Create;
@@ -162,7 +163,7 @@ $app->group('/api/v1/product', function () use ($app) {
         
     })->add(new Validation(Validate::validateEditProduct()));
 
-    $app->delete('/omp/{ompID}/id/{productID}', function(Request $request, Response $response, $args) {
+    $app->delete('/omp/{ompID}/id/{productID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
 		return Delete::deleteProductID($request,$response,$args);
     });
 
@@ -206,7 +207,7 @@ $app->group('/api/v1/promotion', function () use ($app) {
         
     })->add(new Validation(Validate::validateEditPromotion()));
 
-    $app->delete('/omp/{ompID}/id/{promotionID}', function(Request $request, Response $response, $args) {
+    $app->delete('/omp/{ompID}/id/{promotionID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
 		return Delete::deletePromotionID($request,$response,$args);
     });
 
@@ -237,6 +238,29 @@ $app->group('/api/v1/cost', function () use ($app) {
         }
         
     })->add(new Validation(Validate::validateAddLogisticsCost()));
+
+    $app->post('/edit_logistics_cost', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::EditLogisticsCost($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditLogisticsCost()));
+
+    $app->delete('/omp/{ompID}/id/{logisticsCostID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteLogisticsCostID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/logisticcost_list', function(Request $request, Response $response, $args) {
+		return Search::searchLogisticCostList($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/logisticcost_list/lid/{logisticcostID}', function(Request $request, Response $response, $args) {
+		return Search::searchLogisticCostListByID($request,$response,$args);
+    });
 
 })->add($authen);
 
