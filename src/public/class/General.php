@@ -28,6 +28,14 @@ class General
 		$arr_response_text['610']="Product Have Not Register";
 		$arr_response_text['611']="Duplicate Promotion";
 		$arr_response_text['612']="Can Not Delete Promotion";
+		$arr_response_text['613']="Logistics Have Not Register";
+		$arr_response_text['614']="User Have Not In This Group";
+		$arr_response_text['615']="Product Have Not Registered In Group";
+		$arr_response_text['616']="User Have Not Permission";
+		$arr_response_text['617']="Can Not Delete Logistic Cost";
+		$arr_response_text['618']="Ads Have Not Register";
+		$arr_response_text['619']="Can Not Delete Ads Cost";
+		$arr_response_text['620']="Can Not Delete Order";
 
 		return $arr_response_text[$arr_response['response_code']];
 		

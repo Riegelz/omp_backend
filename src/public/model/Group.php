@@ -129,9 +129,25 @@ class Group extends General
     public function searchGroup($req) {
         $ompID = $this->db_con->real_escape_string($req);
         ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}'";
-   		$sqlSearchGroup = "SELECT group_name,group_description,status,create_date FROM `group` $where";
+   		$sqlSearchGroup = "SELECT id,group_name,group_description,status,create_date FROM `group` $where";
 		$resultSearchGroup = $this->db_con->query($sqlSearchGroup);
         $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroup,MYSQLI_ASSOC);
+        $arr_result[STRTOTAL] = count($arr_result[STRGROUPS]);		
+
+        return $arr_result;
+    }
+
+    public function searchGroupByAccountID($ompID,$accountID) {
+        $ompID = $this->db_con->real_escape_string($ompID);
+        $accountID = $this->db_con->real_escape_string($accountID);
+        ($ompID === "1") ? $where = "" : $where = " WHERE `group`.`omp_id` = '{$ompID}'  AND `group_member`.`account_id` = '{$accountID}'";
+           
+        $sqlSearchGroupByAccountID = "SELECT `group`.`id`,`group`.`group_name`,`group`.`group_description`,`group`.`status`,`group`.`create_date`";
+        $sqlSearchGroupByAccountID .= "FROM `group`";
+        $sqlSearchGroupByAccountID .= "LEFT JOIN `group_member`";
+        $sqlSearchGroupByAccountID .= "ON `group`.`id` = `group_member`.`group_id` $where";
+		$resultSearchGroupByAccountID = $this->db_con->query($sqlSearchGroupByAccountID);
+        $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroupByAccountID,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRGROUPS]);		
 
         return $arr_result;
@@ -141,7 +157,7 @@ class Group extends General
         $ompID = $this->db_con->real_escape_string($ompID);
         $groupID = $this->db_con->real_escape_string($groupID);
         ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
-   		$sqlSearchGroup = "SELECT group_name,group_description,status,create_date FROM `group` WHERE id = '{$groupID}' $where";
+   		$sqlSearchGroup = "SELECT id,group_name,group_description,status,create_date FROM `group` WHERE id = '{$groupID}' $where";
 		$resultSearchGroup = $this->db_con->query($sqlSearchGroup);
         $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroup,MYSQLI_ASSOC);
 
@@ -152,7 +168,7 @@ class Group extends General
         $ompID = $this->db_con->real_escape_string($ompID);
         $groupID = $this->db_con->real_escape_string($groupID);
         ($ompID === "1") ? $where = "" : $where = " AND `group`.`omp_id` = '{$ompID}'";
-        $sqlSearchGroup .= "SELECT `group`.`group_name`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
+        $sqlSearchGroup .= "SELECT `group`.`group_name`,`account`.`id`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
         $sqlSearchGroup .= "FROM `group_member`";
         $sqlSearchGroup .= "LEFT JOIN `group`";
         $sqlSearchGroup .= "ON `group_member`.`group_id` = `group`.`id`";

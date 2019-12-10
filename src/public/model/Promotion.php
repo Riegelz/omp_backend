@@ -189,5 +189,18 @@ class Promotion extends General
 
         return $arr_result;
     }
+
+    public function getRoleInGroup($accountID,$groupID) {
+        $group_id = $this->db_con->real_escape_string($groupID);
+        $account_id = $this->db_con->real_escape_string($accountID);
+        $sqlCheckRole = "SELECT group_role FROM `group_member` WHERE `group_id` = '{$group_id}' AND `account_id` = '{$account_id}'";
+		$resultCheckRole = $this->db_con->query($sqlCheckRole);
+        $arr_result = mysqli_fetch_array($resultCheckRole,MYSQLI_ASSOC);
+
+		if(!isset($arr_result)){
+            return $response_code = '614';
+		}
+		return $arr_result;
+    }
     
 }

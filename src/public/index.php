@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use DavidePastore\Slim\Validation\Validation as Validation;
 use src\omp\Add as Add;
 use src\omp\Edit as Edit;
+use src\omp\Rule as Rule;
 use src\omp\Oauth as Oauth;
 use src\omp\Search as Search;
 use src\omp\Create as Create;
@@ -100,6 +101,10 @@ $app->group('/api/v1/group', function () use ($app) {
 		return Search::searchGroup($request,$response,$args);
     });
 
+    $app->get('/omp/{ompID}/group_list/aid/{accountID}', function(Request $request, Response $response, $args) {
+		return Search::searchGroupByAccountID($request,$response,$args);
+    });
+
     $app->get('/omp/{ompID}/id/{groupID}', function(Request $request, Response $response, $args) {
 		return Search::searchGroupID($request,$response,$args);
     });
@@ -158,7 +163,7 @@ $app->group('/api/v1/product', function () use ($app) {
         
     })->add(new Validation(Validate::validateEditProduct()));
 
-    $app->delete('/omp/{ompID}/id/{productID}', function(Request $request, Response $response, $args) {
+    $app->delete('/omp/{ompID}/id/{productID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
 		return Delete::deleteProductID($request,$response,$args);
     });
 
@@ -202,7 +207,7 @@ $app->group('/api/v1/promotion', function () use ($app) {
         
     })->add(new Validation(Validate::validateEditPromotion()));
 
-    $app->delete('/omp/{ompID}/id/{promotionID}', function(Request $request, Response $response, $args) {
+    $app->delete('/omp/{ompID}/id/{promotionID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
 		return Delete::deletePromotionID($request,$response,$args);
     });
 
@@ -216,6 +221,119 @@ $app->group('/api/v1/promotion', function () use ($app) {
 
     $app->get('/omp/{ompID}/promotion_list/gid/{groupID}', function(Request $request, Response $response, $args) {
 		return Search::searchPromotionListByGroupID($request,$response,$args);
+    });
+
+})->add($authen);
+
+$app->group('/api/v1/cost', function () use ($app) {
+
+    #### Logistic Cost API ####
+    $app->post('/add_logistics_cost', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Add::AddLogisticsCost($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateAddLogisticsCost()));
+
+    $app->post('/edit_logistics_cost', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::EditLogisticsCost($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditLogisticsCost()));
+
+    $app->delete('/omp/{ompID}/id/{logisticsCostID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteLogisticsCostID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/logisticcost_list', function(Request $request, Response $response, $args) {
+		return Search::searchLogisticCostList($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/logisticcost_list/lid/{logisticcostID}', function(Request $request, Response $response, $args) {
+		return Search::searchLogisticCostListByID($request,$response,$args);
+    });
+
+    #### Ads Cost API ####
+    $app->post('/add_ads_cost', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Add::AddAdsCost($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateAddAdsCost()));
+
+    $app->post('/edit_ads_cost', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::EditAdsCost($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditAdsCost()));
+
+    $app->delete('/omp/{ompID}/adsid/{adsID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteAdsID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/adscost_list', function(Request $request, Response $response, $args) {
+		return Search::searchAdsCostList($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/adscost_list/adsid/{adsID}', function(Request $request, Response $response, $args) {
+		return Search::searchAdsCostListByID($request,$response,$args);
+    });
+
+})->add($authen);
+
+$app->group('/api/v1/order', function () use ($app) {
+
+    #### Order API ####
+    $app->post('/add_order', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Add::AddOrder($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateAddOrder()));
+
+    $app->post('/edit_order', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Edit::EditOrder($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateEditOrder()));
+
+    $app->delete('/omp/{ompID}/id/{orderID}/aid/{accountID}/gid/{groupID}', function(Request $request, Response $response, $args) {
+		return Delete::deleteOrderID($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/order_list', function(Request $request, Response $response, $args) {
+		return Search::searchOrderList($request,$response,$args);
+    });
+
+    $app->get('/omp/{ompID}/order_list/oid/{orderID}', function(Request $request, Response $response, $args) {
+		return Search::searchOrderListByID($request,$response,$args);
     });
 
 })->add($authen);
