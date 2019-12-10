@@ -4,6 +4,7 @@ namespace src\omp;
 
 use src\omp\model\Group as Group;
 use src\omp\model\Cost as Cost;
+use src\omp\model\Order as Order;
 
 class Add extends General
 {
@@ -57,5 +58,58 @@ class Add extends General
             ## Add Cost in DB ##
             $AddLogisticsCost = $model->AddLogisticsCost($reqbody);
             if(isset($AddLogisticsCost)) { return $response->withJson(General::responseFormat(200,["id" => $AddLogisticsCost])); }
+        }
+
+        public static function AddAdsCost($request,$response)
+	    {
+            $self = New Self();
+            $model = New Cost();
+            $reqbody = $request->getParsedBody();
+            ## Check group have in DB ##
+            if ($reqbody[STRGROUPID] !== "0") {
+                $checkExistGroup = $model->checkExistGroup($reqbody); 
+                if($checkExistGroup !== true) { return $response->withJson(General::responseFormat($checkExistGroup)); }
+            }
+            ## Check product have in DB ##
+            if ($reqbody[STRPRODUCTID] !== "0") {
+                $checkExistProduct = $model->checkExistProduct($reqbody); 
+                if($checkExistProduct !== true) { return $response->withJson(General::responseFormat($checkExistProduct)); }
+            }
+            ## Check ads have in DB ##
+            $checkExistAds = $model->checkExistAds($reqbody); 
+            if($checkExistAds !== true) { return $response->withJson(General::responseFormat($checkExistAds)); }
+
+            ## Check User have in group Ads for add Cost ##
+            $checkExistUserInGroup = $model->checkExistUserInGroup($reqbody); 
+            if($checkExistUserInGroup !== true) { return $response->withJson(General::responseFormat($checkExistUserInGroup)); }
+
+            // ## Add Cost in DB ##
+            $AddAdsCost = $model->AddAdsCost($reqbody);
+            if(isset($AddAdsCost)) { return $response->withJson(General::responseFormat(200,["id" => $AddAdsCost])); }
+        }
+
+        public static function AddOrder($request,$response)
+	    {
+            $self = New Self();
+            $model = New Order();
+            $reqbody = $request->getParsedBody();
+            ## Check group have in DB ##
+            if ($reqbody[STRGROUPID] !== "0") {
+                $checkExistGroup = $model->checkExistGroup($reqbody); 
+                if($checkExistGroup !== true) { return $response->withJson(General::responseFormat($checkExistGroup)); }
+            }
+            ## Check product have in DB ##
+            if ($reqbody[STRPRODUCTID] !== "0") {
+                $checkExistProduct = $model->checkExistProduct($reqbody); 
+                if($checkExistProduct !== true) { return $response->withJson(General::responseFormat($checkExistProduct)); }
+            }
+
+            ## Check User have in group Ads for add Cost ##
+            $checkExistUserInGroup = $model->checkExistUserInGroup($reqbody); 
+            if($checkExistUserInGroup !== true) { return $response->withJson(General::responseFormat($checkExistUserInGroup)); }
+
+            // ## Add Cost in DB ##
+            $AddOrder = $model->AddOrder($reqbody);
+            if(isset($AddOrder)) { return $response->withJson(General::responseFormat(200,["id" => $AddOrder])); }
         }
 }

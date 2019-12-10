@@ -30,7 +30,28 @@ class Validate extends General
 		define("JSONCOSTLOGISTICSID", "logistics_id");
 		define("JSONCOSTLOGISTICSCOST", "logistics_cost");
 		define("JSONCOSTLOGISTICSBYID", "logistics_by_account_id");
+		define("JSONCOSTADSID", "ads_id");
+		define("JSONCOSTADSCOST", "ads_cost");
+		define("JSONCOSTADSBYID", "ads_by_account_id");
 		define("JSONDATETIME", "datetime");
+		define("JSONDATETIMEFORMAT", "Y-m-d H:i:s");
+		define("JSONORDERTRANSACTION","transaction_id");
+		define("JSONORDERNAME","order_name");
+		define("JSONORDERADDRESS","order_address");
+		define("JSONORDERDIST","order_district");
+		define("JSONORDERSUBDIST","order_subdistrict");
+		define("JSONORDERZIPCODE","order_zipcode");
+		define("JSONORDERPROV","order_province");
+		define("JSONORDERTEL","order_telnumber");
+		define("JSONORDERCOST","order_cost");
+		define("JSONORDERLOGISTICID","order_logistics_id");
+		define("JSONORDERDATETIME","order_datetime");
+		define("JSONORDERPAYMENTID","order_payment_id");
+		define("JSONORDERDESCRIPTION","order_description");
+		define("JSONORDERTRACKING","order_tracking_id");
+		define("JSONORDERSTATUS","order_status");
+		define("JSONORDERCOUNTRY","order_country");
+		define("JSONORDERBYACCOUNT","order_by_account_id");
 		
     }
 
@@ -173,7 +194,7 @@ class Validate extends General
 			JSONCOSTLOGISTICSID => v::intVal()->notBlank(),
 			JSONCOSTLOGISTICSCOST => v::intVal()->length(1, 10)->notBlank(),
 			JSONCOSTLOGISTICSBYID => v::intVal()->notBlank(),
-			JSONDATETIME => v::date('Y-m-d H:i:s')->notBlank(),
+			JSONDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
 		);
 	}
 
@@ -188,7 +209,77 @@ class Validate extends General
 			JSONCOSTLOGISTICSID => v::intVal()->notBlank(),
 			JSONCOSTLOGISTICSCOST => v::intVal()->length(1, 10)->notBlank(),
 			JSONCOSTLOGISTICSBYID => v::intVal()->notBlank(),
-			JSONDATETIME => v::date('Y-m-d H:i:s')->notBlank(),
+			JSONDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
+		);
+	}
+
+	public static function validateAddAdsCost()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal(),
+			JSONPRODUCTID => v::intVal(),
+			JSONCOSTADSID => v::intVal()->notBlank(),
+			JSONCOSTADSCOST => v::intVal()->length(1, 10)->notBlank(),
+			JSONCOSTADSBYID => v::intVal()->notBlank(),
+			JSONDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
+		);
+	}
+
+	public static function validateEditAdsCost()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal(),
+			JSONPRODUCTID => v::intVal(),
+			JSONCOSTADSID => v::intVal()->notBlank(),
+			JSONCOSTADSCOST => v::intVal()->length(1, 10)->notBlank(),
+			JSONCOSTADSBYID => v::intVal()->notBlank(),
+			JSONDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
+		);
+	}
+
+	public static function validateAddOrder()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONORDERTRANSACTION => v::stringType()->length(6, 20)->notBlank(),
+			JSONPRODUCTID => v::intVal(),
+			JSONGROUPID => v::intVal(),
+			JSONORDERNAME => v::stringType()->length(3, 100)->notBlank(),
+			JSONORDERADDRESS => v::stringType()->length(3, 500)->notBlank(),
+			JSONORDERDIST => v::stringType()->length(1, 50)->notBlank(),
+			JSONORDERSUBDIST => v::stringType()->length(1, 50)->notBlank(),
+			JSONORDERZIPCODE => v::intVal()->length(5, 5)->notBlank(),
+			JSONORDERPROV => v::stringType()->length(1, 50)->notBlank(),
+			JSONORDERDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
+			JSONORDERPAYMENTID => v::intVal(),
+			JSONORDERBYACCOUNT => v::intVal()->notBlank(),
+		);
+	}
+
+	public static function validateEditOrder()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONID => v::intVal()->notBlank(),
+			JSONORDERTRANSACTION => v::stringType()->length(6, 20)->notBlank(),
+			JSONPRODUCTID => v::intVal(),
+			JSONGROUPID => v::intVal(),
+			JSONORDERNAME => v::stringType()->length(3, 100)->notBlank(),
+			JSONORDERADDRESS => v::stringType()->length(3, 500)->notBlank(),
+			JSONORDERDIST => v::stringType()->length(1, 50)->notBlank(),
+			JSONORDERSUBDIST => v::stringType()->length(1, 50)->notBlank(),
+			JSONORDERZIPCODE => v::intVal()->length(5, 5)->notBlank(),
+			JSONORDERPROV => v::stringType()->length(1, 50)->notBlank(),
+			JSONORDERDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
+			JSONORDERPAYMENTID => v::intVal(),
+			JSONORDERBYACCOUNT => v::intVal()->notBlank(),
 		);
 	}
 }

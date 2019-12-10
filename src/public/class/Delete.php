@@ -4,6 +4,7 @@ namespace src\omp;
 
 use src\omp\Rule as Rule;
 use src\omp\model\Cost as Cost;
+use src\omp\model\Order as Order;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
@@ -131,5 +132,55 @@ class Delete extends General
         ## Delete Logistics cost ##
         $deleteLogisticsCostID = $model->deleteLogisticsCostID($ompID,$logisticsCostID);
         if(isset($deleteLogisticsCostID)) { return $response->withJson(General::responseFormat($deleteLogisticsCostID)); }
+    }
+
+    public static function deleteAdsID($request,$response,$args)
+	{
+        $self = New Self();
+        $rule = New Rule();
+        $model = New Cost();
+        $ompID = $args[STROMPID];
+        $accountID = $args[STRACCOUNTID];
+        $groupID = $args[STRGROUPID];
+        $adsID = $args['adsID'];
+
+        if ($ompID !== OMP_ADMIN) {
+            ## Get Role in Group ##
+            $getRoleInGroup = $model->getRoleInGroup($accountID,$groupID);
+            if(!is_array($getRoleInGroup)) { return $response->withJson(General::responseFormat($getRoleInGroup)); }
+
+            ## Check Account Permission Rules ##
+            $PermissionDeleteAdsCost = $rule->PermissionAll($getRoleInGroup[STRGROUPROLE]);
+            if($PermissionDeleteAdsCost !== true) { return $response->withJson(General::responseFormat($PermissionDeleteAdsCost)); }
+        }
+
+        ## Delete Logistics cost ##
+        $deleteAdsID = $model->deleteAdsID($ompID,$adsID);
+        if(isset($deleteAdsID)) { return $response->withJson(General::responseFormat($deleteAdsID)); }
+    }
+
+    public static function deleteOrderID($request,$response,$args)
+	{
+        $self = New Self();
+        $rule = New Rule();
+        $model = New Order();
+        $ompID = $args[STROMPID];
+        $accountID = $args[STRACCOUNTID];
+        $groupID = $args[STRGROUPID];
+        $orderID = $args['orderID'];
+
+        if ($ompID !== OMP_ADMIN) {
+            ## Get Role in Group ##
+            $getRoleInGroup = $model->getRoleInGroup($accountID,$groupID);
+            if(!is_array($getRoleInGroup)) { return $response->withJson(General::responseFormat($getRoleInGroup)); }
+
+            ## Check Account Permission Rules ##
+            $PermissionDeleteAdsCost = $rule->PermissionMedium($getRoleInGroup[STRGROUPROLE]);
+            if($PermissionDeleteAdsCost !== true) { return $response->withJson(General::responseFormat($PermissionDeleteAdsCost)); }
+        }
+
+        ## Delete Logistics cost ##
+        $deleteOrderID = $model->deleteOrderID($ompID,$orderID);
+        if(isset($deleteOrderID)) { return $response->withJson(General::responseFormat($deleteOrderID)); }
     }
 }

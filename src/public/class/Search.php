@@ -3,6 +3,7 @@
 namespace src\omp;
 
 use src\omp\model\Cost as Cost;
+use src\omp\model\Order as Order;
 use src\omp\model\Group as Group;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
@@ -18,6 +19,8 @@ class Search extends General
                 define("SEARCHPRODUCTID", "productID");
                 define("SEARCHPROMOTIONID", "promotionID");
                 define("SEARCHLOGISTICID", "logisticcostID");
+                define("SEARCHORDERID", "orderID");
+                define("SEARCHADSID", "adsID");
         }
 
 	public static function searchAccount($request,$response,$args)
@@ -167,5 +170,47 @@ class Search extends General
                 ## Search cost ##
                 $searchLogisticCostListByID = $model->searchLogisticCostListByID($ompID,$logisticcostID);
                 if(isset($searchLogisticCostListByID)) { return $response->withJson(General::responseFormat(200,$searchLogisticCostListByID)); }
+        }
+
+        public static function searchAdsCostList($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Cost();
+                $ompID = $args[SEARCHOMPID];
+                ## Search cost ##
+                $searchAdsCostList = $model->searchAdsCostList($ompID);
+                if(isset($searchAdsCostList)) { return $response->withJson(General::responseFormat(200,$searchAdsCostList)); }
+        }
+
+        public static function searchAdsCostListByID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Cost();
+                $ompID = $args[SEARCHOMPID];
+                $adsID = $args[SEARCHADSID];
+                ## Search cost ##
+                $searchAdsCostListByID = $model->searchAdsCostListByID($ompID,$adsID);
+                if(isset($searchAdsCostListByID)) { return $response->withJson(General::responseFormat(200,$searchAdsCostListByID)); }
+        }
+
+        public static function searchOrderList($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Order();
+                $ompID = $args[SEARCHOMPID];
+                ## Search cost ##
+                $searchOrderList = $model->searchOrderList($ompID);
+                if(isset($searchOrderList)) { return $response->withJson(General::responseFormat(200,$searchOrderList)); }
+        }
+
+        public static function searchOrderListByID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Order();
+                $ompID = $args[SEARCHOMPID];
+                $orderID = $args[SEARCHORDERID];
+                ## Search cost ##
+                $searchOrderListByID = $model->searchOrderListByID($ompID,$orderID);
+                if(isset($searchOrderListByID)) { return $response->withJson(General::responseFormat(200,$searchOrderListByID)); }
         }
 }

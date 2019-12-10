@@ -33,6 +33,9 @@ class General
 		$arr_response_text['615']="Product Have Not Registered In Group";
 		$arr_response_text['616']="User Have Not Permission";
 		$arr_response_text['617']="Can Not Delete Logistic Cost";
+		$arr_response_text['618']="Ads Have Not Register";
+		$arr_response_text['619']="Can Not Delete Ads Cost";
+		$arr_response_text['620']="Can Not Delete Order";
 
 		return $arr_response_text[$arr_response['response_code']];
 		
