@@ -338,4 +338,25 @@ $app->group('/api/v1/order', function () use ($app) {
 
 })->add($authen);
 
+$app->group('/api/v1/auth', function () use ($app) {
+
+    #### Login API ####
+
+    $app->post('/login', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Search::Login($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validateLogin()));
+
+    $app->get('/ompuser/{ompUser}/omptoken/{ompToken}', function(Request $request, Response $response, $args) {
+		return Search::searchOmpID($request,$response,$args);
+    });
+
+})->add($authen);
+
 $app->run();

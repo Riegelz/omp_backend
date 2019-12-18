@@ -21,6 +21,8 @@ class Search extends General
                 define("SEARCHLOGISTICID", "logisticcostID");
                 define("SEARCHORDERID", "orderID");
                 define("SEARCHADSID", "adsID");
+                define("SEARCHOMPUSER", "ompUser");
+                define("SEARCHOMPTOKEN", "ompToken");
         }
 
 	public static function searchAccount($request,$response,$args)
@@ -212,5 +214,26 @@ class Search extends General
                 ## Search cost ##
                 $searchOrderListByID = $model->searchOrderListByID($ompID,$orderID);
                 if(isset($searchOrderListByID)) { return $response->withJson(General::responseFormat(200,$searchOrderListByID)); }
+        }
+
+        public static function searchOmpID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Account();
+                $ompuser = $args[SEARCHOMPUSER];
+                $omptoken = $args[SEARCHOMPTOKEN];
+                ## Search OMP ID ##
+                $searchOmpID = $model->searchOmpID($ompuser,$omptoken);
+                if(isset($searchOmpID)) { return $response->withJson(General::responseFormat(200,$searchOmpID)); }
+        }
+
+        public static function Login($request,$response)
+	{
+                $self = New Self();
+                $model = New Account();
+                $reqbody = $request->getParsedBody();
+                ## Search Account login ##
+                $Login = $model->Login($reqbody);
+                if(isset($Login['accounts'])) { return $response->withJson(General::responseFormat(200,["id" => $Login])); }
         }
 }
