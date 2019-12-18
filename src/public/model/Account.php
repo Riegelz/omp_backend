@@ -135,5 +135,26 @@ class Account extends General
     	$sql = "DELETE FROM `group_member` WHERE account_id = '{$accountID}'";
         $resultSearchAcc = $this->db_con->query($sql);
     }
+
+    public function searchOmpID($ompuser,$omptoken) {
+        $ompuser = $this->db_con->real_escape_string($ompuser);
+        $omptoken = $this->db_con->real_escape_string($omptoken);
+   		$sqlSearchAcc = "SELECT id,omp_name,omp_secret_id,status FROM `omp_account` WHERE omp_name = '{$ompuser}' AND omp_secret_id = '{$omptoken}'";
+		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
+        $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
+
+        return $arr_result;
+    }
+
+    public function Login($req) {
+        $ompid = $this->db_con->real_escape_string($req['omp_id']);
+        $user = $this->db_con->real_escape_string($req['username']);
+        $password = md5($this->db_con->real_escape_string($req['password']));
+   		$sqlSearchAcc = "SELECT * FROM `account` WHERE username = '{$user}' AND password = '{$password}'";
+		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
+        $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
+
+        return $arr_result;
+    }
     
 }
