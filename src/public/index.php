@@ -113,6 +113,10 @@ $app->group('/api/v1/group', function () use ($app) {
 		return Search::searchGroupMember($request,$response,$args);
     });
 
+    $app->get('/omp/{ompID}/id/{groupID}/member/aid/{accountID}', function(Request $request, Response $response, $args) {
+		return Search::searchGroupMemberByID($request,$response,$args);
+    });
+
     $app->post('/add_group_member', function (Request $request, Response $response) {
         
         $errors = Validate::exec($request, $response);

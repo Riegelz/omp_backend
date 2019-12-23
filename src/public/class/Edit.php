@@ -33,7 +33,7 @@ class Edit extends General
                 $reqbody = $request->getParsedBody();
                 ## Edit group ##
                 $editGroup = $model->editGroup($reqbody);
-                if(isset($editGroup)) { return $response->withJson(General::responseFormat()); }
+                if(isset($editGroup)) { return $response->withJson(General::responseFormat($editGroup)); }
         }
         
         public static function editProduct($request,$response)
