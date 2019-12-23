@@ -103,13 +103,22 @@ class Group extends General
         $status = $this->db_con->real_escape_string($req[STATUS]);
         $currentDate = date(STRDATETIME);
 
-   		$sqlEditGroup = "UPDATE `group` 
-   		SET group_name = '{$group_name}',
-            group_description = '{$group_description}',
-            status = '{$status}',
-            last_update = '{$currentDate}'
-		WHERE id = '{$id}' AND omp_id = '{$omp_id}'";
-		return $this->db_con->query($sqlEditGroup);
+   		$sqlCheckDup = "SELECT * FROM `group` WHERE group_name = '{$group_name}' AND id != '{$id}'";
+		$resultCheckDup = $this->db_con->query($sqlCheckDup);
+        $arr_result = mysqli_fetch_array($resultCheckDup,MYSQLI_ASSOC);
+
+		if(isset($arr_result)){
+			return $response_code = '602';
+		}else{
+            $sqlEditGroup = "UPDATE `group` 
+            SET group_name = '{$group_name}',
+                group_description = '{$group_description}',
+                status = '{$status}',
+                last_update = '{$currentDate}'
+            WHERE id = '{$id}' AND omp_id = '{$omp_id}'";
+            $this->db_con->query($sqlEditGroup);
+        }
+		return $response_code = '200';
     }
 
     public function deleteGroupID($ompID,$groupID) {
@@ -175,6 +184,24 @@ class Group extends General
         $sqlSearchGroup .= "LEFT JOIN `account`";
         $sqlSearchGroup .= "ON `group_member`.`account_id` = `account`.`id`";
    		$sqlSearchGroup .= "WHERE `group_member`.`group_id` = '{$groupID}' $where";
+		$resultSearchGroup = $this->db_con->query($sqlSearchGroup);
+        $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroup,MYSQLI_ASSOC);
+
+        return $arr_result;
+    }
+
+    public function searchGroupMemberByID($ompID,$groupID,$accountID) {
+        $ompID = $this->db_con->real_escape_string($ompID);
+        $groupID = $this->db_con->real_escape_string($groupID);
+        $accountID = $this->db_con->real_escape_string($accountID);
+        ($ompID === "1") ? $where = "" : $where = " AND `group`.`omp_id` = '{$ompID}'";
+        $sqlSearchGroup .= "SELECT `group`.`group_name`,`account`.`id`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
+        $sqlSearchGroup .= "FROM `group_member`";
+        $sqlSearchGroup .= "LEFT JOIN `group`";
+        $sqlSearchGroup .= "ON `group_member`.`group_id` = `group`.`id`";
+        $sqlSearchGroup .= "LEFT JOIN `account`";
+        $sqlSearchGroup .= "ON `group_member`.`account_id` = `account`.`id`";
+   		$sqlSearchGroup .= "WHERE `group_member`.`group_id` = '{$groupID}' AND `group_member`.`account_id` = '{$accountID}' $where";
 		$resultSearchGroup = $this->db_con->query($sqlSearchGroup);
         $arr_result[STRGROUPS] = mysqli_fetch_all($resultSearchGroup,MYSQLI_ASSOC);
 
