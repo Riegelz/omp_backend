@@ -77,8 +77,11 @@ class Account extends General
         $omp_id = $this->db_con->real_escape_string($req[OMPID]);
    		$id = $this->db_con->real_escape_string($req[ID]);
    		$account_name = $this->db_con->real_escape_string($req[ACCOUNTNAME]);
-   		$username = $this->db_con->real_escape_string($req[USERNAME]);
-   		$password = md5($this->db_con->real_escape_string($req[PASSWORD]));
+        $username = $this->db_con->real_escape_string($req[USERNAME]);
+        if (!empty($req[PASSWORD]) || !$req[PASSWORD] == "") {
+            $password = md5($this->db_con->real_escape_string($req[PASSWORD]));
+            $sqlpass = ",password = '{$password}'";
+        }
         $status = $this->db_con->real_escape_string($req[STATUS]);
         $currentDate = date(STRDATETIME);
    		$account_role = $this->db_con->real_escape_string($req[ACCOUNTROLE]);
@@ -86,18 +89,17 @@ class Account extends General
    		$sqlEditAccount = "UPDATE account 
    		SET account_name = '{$account_name}',
             username = '{$username}',
-            password = '{$password}',
             status = '{$status}',
             last_update = '{$currentDate}',
-            account_role = '{$account_role}'
+            account_role = '{$account_role}'$sqlpass
 		WHERE id = '{$id}' AND omp_id = '{$omp_id}'";
 		return $this->db_con->query($sqlEditAccount);
     }
 
     public function searchAccount($req) {
         $ompID = $this->db_con->real_escape_string($req);
-        ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}'";
-   		$sqlSearchAcc = "SELECT account_name,username,status,create_date FROM account $where";
+        ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}' AND id != '1'";
+   		$sqlSearchAcc = "SELECT id,account_name,username,status,account_role,create_date FROM account $where";
 		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
         $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRACCOUNTS]);		
@@ -109,7 +111,7 @@ class Account extends General
         $ompID = $this->db_con->real_escape_string($ompID);
         $accountID = $this->db_con->real_escape_string($accountID);
         ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
-   		$sqlSearchAcc = "SELECT account_name,username,status,create_date FROM account WHERE id = '{$accountID}' $where";
+   		$sqlSearchAcc = "SELECT id,account_name,username,status,account_role,create_date FROM account WHERE id = '{$accountID}' $where";
 		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
         $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);
 

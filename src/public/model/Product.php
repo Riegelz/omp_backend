@@ -114,8 +114,10 @@ class Product extends General
 
     public function searchProductList($ompID) {
         $ompID = $this->db_con->real_escape_string($ompID);
-        ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}'";
-   		$sqlSearchProduct = "SELECT product_name,product_prefix,product_price,product_detail,status,create_date FROM `product` $where";
+        ($ompID === "1") ? $where = "" : $where = " WHERE `product`.`omp_id` = '{$ompID}'";
+        $sqlSearchProduct = "SELECT `product`.`id`,`product`.`product_name`,`product`.`product_prefix`, `group`.`id` as group_id, `group`.`group_name`,`product`.`product_price`,`product`.`product_detail`,`product`.`status`,`product`.`create_date` FROM `product`";
+        $sqlSearchProduct .= "LEFT JOIN `group`";
+        $sqlSearchProduct .= "ON `product`.`product_group_id` = `group`.`id` $where";
 		$resultSearchProduct = $this->db_con->query($sqlSearchProduct);
         $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchProduct,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		
@@ -127,7 +129,7 @@ class Product extends General
         $ompID = $this->db_con->real_escape_string($ompID);
         $groupid = $this->db_con->real_escape_string($groupID);
         ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
-   		$sqlSearchProduct = "SELECT product_name,product_prefix,product_price,product_detail,status,create_date FROM `product` WHERE `product_group_id` = '{$groupid}' $where";
+   		$sqlSearchProduct = "SELECT id,product_name,product_prefix,product_price,product_detail,status,create_date FROM `product` WHERE `product_group_id` = '{$groupid}' AND `status` = '1' $where";
 		$resultSearchProduct = $this->db_con->query($sqlSearchProduct);
         $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchProduct,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		
@@ -138,8 +140,11 @@ class Product extends General
     public function searchProductListByProductID($ompID,$productID) {
         $ompID = $this->db_con->real_escape_string($ompID);
         $productID = $this->db_con->real_escape_string($productID);
-        ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
-   		$sqlSearchProduct = "SELECT product_name,product_prefix,product_price,product_detail,status,create_date FROM `product` WHERE `id` = '{$productID}' $where";
+        ($ompID === "1") ? $where = "" : $where = " AND `product`.`omp_id` = '{$ompID}'";
+        $sqlSearchProduct = "SELECT `product`.`id`,`product`.`product_name`,`product`.`product_prefix`, `group`.`id` as group_id, `group`.`group_name`,`product`.`product_price`,`product`.`product_detail`,`product`.`status`,`product`.`create_date` FROM `product`";
+        $sqlSearchProduct .= "LEFT JOIN `group`";
+        $sqlSearchProduct .= "ON `product`.`product_group_id` = `group`.`id`";
+        $sqlSearchProduct .= "WHERE `product`.`id` = '{$productID}' $where";
 		$resultSearchProduct = $this->db_con->query($sqlSearchProduct);
         $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchProduct,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		

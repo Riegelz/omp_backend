@@ -157,8 +157,12 @@ class Promotion extends General
 
     public function searchPromotionList($ompID) {
         $ompID = $this->db_con->real_escape_string($ompID);
-        ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}'";
-   		$sqlSearchPromotion = "SELECT group_id,product_id,promotion_name,promotion_product_amount,promotion_price,promotion_period_begin,promotion_period_end,status,create_date FROM `promotion` $where";
+        ($ompID === "1") ? $where = "" : $where = " WHERE `promotion`.`omp_id` = '{$ompID}'";
+        $sqlSearchPromotion = "SELECT `promotion`.`id`,`promotion`.`group_id`,`group`.`group_name`,`promotion`.`product_id`,`product`.`product_name`,`promotion`.`promotion_name`,`promotion`.`promotion_product_amount`,`promotion`.`promotion_price`,`promotion`.`promotion_period_begin`,`promotion`.`promotion_period_end`,`promotion`.`status`,`promotion`.`create_date` FROM `promotion`";
+        $sqlSearchPromotion .= "LEFT JOIN `product`";
+        $sqlSearchPromotion .= "ON `promotion`.`product_id` = `product`.`id`";
+        $sqlSearchPromotion .= "LEFT JOIN `group`";
+        $sqlSearchPromotion .= "ON `promotion`.`group_id` = `group`.`id` $where";
 		$resultSearchPromotion = $this->db_con->query($sqlSearchPromotion);
         $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchPromotion,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		
@@ -169,8 +173,12 @@ class Promotion extends General
     public function searchPromotionListByPromotionID($ompID,$promotionID) {
         $ompID = $this->db_con->real_escape_string($ompID);
         $promotionID = $this->db_con->real_escape_string($promotionID);
-        ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
-   		$sqlSearchPromotion = "SELECT group_id,product_id,promotion_name,promotion_product_amount,promotion_price,promotion_period_begin,promotion_period_end,status,create_date FROM `promotion` WHERE `id` = '{$promotionID}' $where";
+        ($ompID === "1") ? $where = "" : $where = " AND `promotion`.`omp_id` = '{$ompID}'";
+        $sqlSearchPromotion = "SELECT `promotion`.`id`,`promotion`.`group_id`,`group`.`group_name`,`promotion`.`product_id`,`product`.`product_name`,`promotion`.`promotion_name`,`promotion`.`promotion_product_amount`,`promotion`.`promotion_price`,`promotion`.`promotion_period_begin`,`promotion`.`promotion_period_end`,`promotion`.`status`,`promotion`.`create_date` FROM `promotion`";
+        $sqlSearchPromotion .= "LEFT JOIN `product`";
+        $sqlSearchPromotion .= "ON `promotion`.`product_id` = `product`.`id`";
+        $sqlSearchPromotion .= "LEFT JOIN `group`";
+        $sqlSearchPromotion .= "ON `promotion`.`group_id` = `group`.`id` WHERE `promotion`.`id` = '{$promotionID}' $where";
 		$resultSearchPromotion = $this->db_con->query($sqlSearchPromotion);
         $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchPromotion,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		
