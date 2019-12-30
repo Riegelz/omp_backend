@@ -83,7 +83,6 @@ class Validate extends General
 			JSONID => v::intVal()->notBlank(),
 			JSONACCOUNTNAME => v::stringType()->length(5, 100)->notBlank(),
 			JSONUSERNAME => v::stringType()->length(5, 20)->noWhitespace()->notBlank(),
-			JSONPASSWORD => v::stringType()->length(5, 50)->noWhitespace()->notBlank(),
 			JSONSTATUS => v::intVal()->between('0', '1'),
 			JSONACCOUNTROLE => v::intVal()->between('0', '1'),
 		);
