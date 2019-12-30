@@ -149,9 +149,9 @@ class Group extends General
     public function searchGroupByAccountID($ompID,$accountID) {
         $ompID = $this->db_con->real_escape_string($ompID);
         $accountID = $this->db_con->real_escape_string($accountID);
-        ($ompID === "1") ? $where = "" : $where = " WHERE `group`.`omp_id` = '{$ompID}'  AND `group_member`.`account_id` = '{$accountID}'";
+        ($ompID === "1") ? $where = "" : $where = " WHERE `group`.`omp_id` = '{$ompID}' AND `group`.`status` = '1' AND `group_member`.`account_id` = '{$accountID}'";
            
-        $sqlSearchGroupByAccountID = "SELECT `group`.`id`,`group`.`group_name`,`group`.`group_description`,`group`.`status`,`group`.`create_date`";
+        $sqlSearchGroupByAccountID = "SELECT `group`.`id`,`group`.`group_name`,`group`.`group_description`,`group`.`status`,`group_member`.`group_role`,`group`.`create_date`";
         $sqlSearchGroupByAccountID .= "FROM `group`";
         $sqlSearchGroupByAccountID .= "LEFT JOIN `group_member`";
         $sqlSearchGroupByAccountID .= "ON `group`.`id` = `group_member`.`group_id` $where";
