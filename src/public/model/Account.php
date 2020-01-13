@@ -98,7 +98,7 @@ class Account extends General
 
     public function searchAccount($req) {
         $ompID = $this->db_con->real_escape_string($req);
-        ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}' AND id != '1'";
+        ($ompID === "1") ? $where = "" : $where = " WHERE omp_id = '{$ompID}' AND id != '1' And status != '0'";
    		$sqlSearchAcc = "SELECT id,account_name,username,status,account_role,create_date FROM account $where";
 		$resultSearchAcc = $this->db_con->query($sqlSearchAcc);
         $arr_result[STRACCOUNTS] = mysqli_fetch_all($resultSearchAcc,MYSQLI_ASSOC);

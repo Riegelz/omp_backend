@@ -5,6 +5,7 @@ namespace src\omp;
 use src\omp\model\Cost as Cost;
 use src\omp\model\Order as Order;
 use src\omp\model\Group as Group;
+use src\omp\model\Other as Other;
 use src\omp\model\Account as Account;
 use src\omp\model\Product as Product;
 use src\omp\model\Promotion as Promotion;
@@ -21,6 +22,8 @@ class Search extends General
                 define("SEARCHLOGISTICID", "logisticcostID");
                 define("SEARCHORDERID", "orderID");
                 define("SEARCHADSID", "adsID");
+                define("SEARCHPROVINCEID", "provinceID");
+                define("SEARCHDISTRICTSID", "districtsID");
                 define("SEARCHOMPUSER", "ompUser");
                 define("SEARCHOMPTOKEN", "ompToken");
         }
@@ -165,6 +168,17 @@ class Search extends General
                 if(isset($searchPromotionListByGroupID)) { return $response->withJson(General::responseFormat(200,$searchPromotionListByGroupID)); }
         }
 
+        public static function searchPromotionListByProductID($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Promotion();
+                $ompID = $args[SEARCHOMPID];
+                $productID = $args[SEARCHPRODUCTID];
+                ## Search promotion ##
+                $searchPromotionListByProductID = $model->searchPromotionListByProductID($ompID,$productID);
+                if(isset($searchPromotionListByProductID)) { return $response->withJson(General::responseFormat(200,$searchPromotionListByProductID)); }
+        }
+
         public static function searchLogisticCostList($request,$response,$args)
 	{
                 $self = New Self();
@@ -247,5 +261,61 @@ class Search extends General
                 ## Search Account login ##
                 $Login = $model->Login($reqbody);
                 if(isset($Login['accounts'])) { return $response->withJson(General::responseFormat(200,["id" => $Login])); }
+        }
+
+        public static function searchPayment($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Other();
+                ## Search Payment ##
+                $searchPayment = $model->searchPayment();
+                if(isset($searchPayment)) { return $response->withJson(General::responseFormat(200,$searchPayment)); }
+        }
+
+        public static function searchLogistic($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Other();
+                ## Search Logistic ##
+                $searchLogistic = $model->searchLogistic();
+                if(isset($searchLogistic)) { return $response->withJson(General::responseFormat(200,$searchLogistic)); }
+        }
+
+        public static function searchAds($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Other();
+                ## Search Logistic ##
+                $searchAds = $model->searchAds();
+                if(isset($searchAds)) { return $response->withJson(General::responseFormat(200,$searchAds)); }
+        }
+
+        public static function searchProvince($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Other();
+                ## Search Logistic ##
+                $searchProvince = $model->searchProvince();
+                if(isset($searchProvince)) { return $response->withJson(General::responseFormat(200,$searchProvince)); }
+        }
+
+        public static function searchDistricts($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Other();
+                $provinceID = $args[SEARCHPROVINCEID];
+                ## Search Logistic ##
+                $searchDistricts = $model->searchDistricts($provinceID);
+                if(isset($searchDistricts)) { return $response->withJson(General::responseFormat(200,$searchDistricts)); }
+        }
+
+        public static function searchSubdistricts($request,$response,$args)
+	{
+                $self = New Self();
+                $model = New Other();
+                $districtsID = $args[SEARCHDISTRICTSID];
+                ## Search Logistic ##
+                $searchSubdistricts = $model->searchSubdistricts($districtsID);
+                if(isset($searchSubdistricts)) { return $response->withJson(General::responseFormat(200,$searchSubdistricts)); }
         }
 }
