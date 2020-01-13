@@ -38,7 +38,8 @@ class Order extends General
 		define("ORDERTRACKING","order_tracking_id");
 		define("ORDERSTATUS","order_status");
 		define("ORDERCOUNTRY","order_country");
-		define("ORDERACCOUNTID", "order_by_account_id");
+        define("ORDERACCOUNTID", "order_by_account_id");
+        define("ORDERPROMOTIONID", "order_promotion_id");
         ## String Name ##
         define("STRACCOUNTS", "accounts");
         define("STRGROUPS", "groups");
@@ -113,6 +114,7 @@ class Order extends General
         $order_logistics_id = $this->db_con->real_escape_string($req[ORDERLOGISTICID]);
         $order_datetime = $this->db_con->real_escape_string($req[ORDERDATETIME]);
         $order_payment_id = $this->db_con->real_escape_string($req[ORDERPAYMENTID]);
+        $order_promotion_id = $this->db_con->real_escape_string($req[ORDERPROMOTIONID]);
         $order_description = $this->db_con->real_escape_string($req[ORDERDESCRIPTION]);
         $order_tracking_id = $this->db_con->real_escape_string($req[ORDERTRACKING]);
         $order_status = $this->db_con->real_escape_string($req[ORDERSTATUS]);
@@ -121,7 +123,7 @@ class Order extends General
         $order_lastupdate = date(STRDATETIME);
 
         $sqlAddOrder = "INSERT INTO `order_transaction` 
-            (omp_id, transaction_id, product_id, group_id, order_name, order_address, order_district, order_subdistrict, order_zipcode, order_province, order_telnumber, order_cost, order_logistics_id, order_datetime, order_payment_id, order_description, order_tracking_id, order_status, order_country, order_lastupdate, order_by_account_id)
+            (omp_id, transaction_id, product_id, group_id, order_name, order_address, order_district, order_subdistrict, order_zipcode, order_province, order_telnumber, order_cost, order_logistics_id, order_datetime, order_payment_id, order_promotion_id, order_description, order_tracking_id, order_status, order_country, order_lastupdate, order_by_account_id)
         VALUES (
             '{$omp_id}',
             '{$transaction_id}',
@@ -138,6 +140,7 @@ class Order extends General
             '{$order_logistics_id}',
             '{$order_datetime}',
             '{$order_payment_id}',
+            '{$order_promotion_id}',
             '{$order_description}',
             '{$order_tracking_id}',
             '{$order_status}',
@@ -166,6 +169,7 @@ class Order extends General
         $order_logistics_id = $this->db_con->real_escape_string($req[ORDERLOGISTICID]);
         $order_datetime = $this->db_con->real_escape_string($req[ORDERDATETIME]);
         $order_payment_id = $this->db_con->real_escape_string($req[ORDERPAYMENTID]);
+        $order_promotion_id = $this->db_con->real_escape_string($req[ORDERPROMOTIONID]);
         $order_description = $this->db_con->real_escape_string($req[ORDERDESCRIPTION]);
         $order_tracking_id = $this->db_con->real_escape_string($req[ORDERTRACKING]);
         $order_status = $this->db_con->real_escape_string($req[ORDERSTATUS]);
@@ -189,6 +193,7 @@ class Order extends General
             order_logistics_id = '{$order_logistics_id}',
             order_datetime = '{$order_datetime}',
             order_payment_id = '{$order_payment_id}',
+            order_promotion_id = '{$order_promotion_id}',
             order_description = '{$order_description}',
             order_tracking_id = '{$order_tracking_id}',
             order_status = '{$order_status}',

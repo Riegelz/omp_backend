@@ -177,7 +177,7 @@ class Group extends General
         $ompID = $this->db_con->real_escape_string($ompID);
         $groupID = $this->db_con->real_escape_string($groupID);
         ($ompID === "1") ? $where = "" : $where = " AND `group`.`omp_id` = '{$ompID}'";
-        $sqlSearchGroup .= "SELECT `group`.`group_name`,`account`.`id`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
+        $sqlSearchGroup .= "SELECT `group`.`id` as gid,`group`.`group_name`,`account`.`id`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
         $sqlSearchGroup .= "FROM `group_member`";
         $sqlSearchGroup .= "LEFT JOIN `group`";
         $sqlSearchGroup .= "ON `group_member`.`group_id` = `group`.`id`";
@@ -195,7 +195,7 @@ class Group extends General
         $groupID = $this->db_con->real_escape_string($groupID);
         $accountID = $this->db_con->real_escape_string($accountID);
         ($ompID === "1") ? $where = "" : $where = " AND `group`.`omp_id` = '{$ompID}'";
-        $sqlSearchGroup .= "SELECT `group`.`group_name`,`account`.`id`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
+        $sqlSearchGroup .= "SELECT `group`.`id` AS group_id,`group`.`group_name`,`account`.`id`,`account`.`account_name`,`account`.`username`,`group_member`.`group_role`,`group_member`.`last_update`";
         $sqlSearchGroup .= "FROM `group_member`";
         $sqlSearchGroup .= "LEFT JOIN `group`";
         $sqlSearchGroup .= "ON `group_member`.`group_id` = `group`.`id`";

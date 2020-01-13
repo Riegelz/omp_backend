@@ -227,6 +227,10 @@ $app->group('/api/v1/promotion', function () use ($app) {
 		return Search::searchPromotionListByGroupID($request,$response,$args);
     });
 
+    $app->get('/omp/{ompID}/promotion_list/productid/{productID}', function(Request $request, Response $response, $args) {
+		return Search::searchPromotionListByProductID($request,$response,$args);
+    });
+
 })->add($authen);
 
 $app->group('/api/v1/cost', function () use ($app) {
@@ -359,6 +363,36 @@ $app->group('/api/v1/auth', function () use ($app) {
 
     $app->get('/ompuser/{ompUser}/omptoken/{ompToken}', function(Request $request, Response $response, $args) {
 		return Search::searchOmpID($request,$response,$args);
+    });
+
+})->add($authen);
+
+$app->group('/api/v1/other', function () use ($app) {
+
+    #### Other API ####
+
+    $app->get('/paymentlists', function(Request $request, Response $response, $args) {
+		return Search::searchPayment($request,$response,$args);
+    });
+
+    $app->get('/logisticlists', function(Request $request, Response $response, $args) {
+		return Search::searchLogistic($request,$response,$args);
+    });
+
+    $app->get('/adslists', function(Request $request, Response $response, $args) {
+		return Search::searchAds($request,$response,$args);
+    });
+
+    $app->get('/province', function(Request $request, Response $response, $args) {
+		return Search::searchProvince($request,$response,$args);
+    });
+
+    $app->get('/districts/province/{provinceID}', function(Request $request, Response $response, $args) {
+		return Search::searchDistricts($request,$response,$args);
+    });
+
+    $app->get('/subdistricts/districts/{districtsID}', function(Request $request, Response $response, $args) {
+		return Search::searchSubdistricts($request,$response,$args);
     });
 
 })->add($authen);

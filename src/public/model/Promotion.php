@@ -108,7 +108,25 @@ class Promotion extends General
             '{$create_date}' $value
         )";
         $result_add_register = $this->db_con->query($sqlCreateProduction); 
-        return $this->db_con->insert_id;
+
+        $promotion_id = $this->db_con->insert_id;
+
+        $sqlCreateProductionLog = "INSERT INTO `promotion_log` 
+            (omp_id, group_id, product_id, promotion_id, promotion_name, promotion_product_amount, promotion_price, status, create_date)
+        VALUES (
+            '{$omp_id}',
+            '{$group_id}',
+            '{$product_id}',
+            '{$promotion_id}',
+            '{$promotion_name}',
+            '{$promotion_product_amount}',
+            '{$promotion_price}',
+            '1',
+            '{$create_date}'
+        )";
+        $this->db_con->query($sqlCreateProductionLog); 
+
+        return $promotion_id;
     }
 
     public function editPromotion($req) {
@@ -137,8 +155,20 @@ class Promotion extends General
             promotion_price = '{$promotion_price}',
             status = '{$status}',
             last_update = '{$currentDate}'$sql
-		WHERE id = '{$id}' AND omp_id = '{$omp_id}'";
-		return $this->db_con->query($sqlEditPromotion);
+        WHERE id = '{$id}' AND omp_id = '{$omp_id}'";
+
+        $update = $this->db_con->query($sqlEditPromotion);
+        
+        $sqlEditPromotionLog = "UPDATE `promotion_log` 
+   		SET group_id = '{$group_id}',
+            product_id = '{$product_id}',
+            promotion_name = '{$promotion_name}',
+            promotion_product_amount = '{$promotion_product_amount}',
+            promotion_price = '{$promotion_price}'
+        WHERE promotion_id = '{$id}' AND omp_id = '{$omp_id}'";
+        $updateLog = $this->db_con->query($sqlEditPromotionLog);
+        
+		return $update;
     }
 
     public function deletePromotionID($ompID,$promotionID) {
@@ -150,6 +180,10 @@ class Promotion extends General
         if (!mysqli_affected_rows($this->db_con)) {
             $status = 612;
         }else{
+            $sqlEditPromotionLog = "UPDATE `promotion_log` 
+            SET status = '0'
+            WHERE promotion_id = '{$promotionID}' AND omp_id = '{$ompID}'";
+            $updateLog = $this->db_con->query($sqlEditPromotionLog);
             $status = 200;
         }
         return $status;
@@ -191,6 +225,18 @@ class Promotion extends General
         $groupid = $this->db_con->real_escape_string($groupID);
         ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
    		$sqlSearchPromotion = "SELECT group_id,product_id,promotion_name,promotion_product_amount,promotion_price,promotion_period_begin,promotion_period_end,status,create_date FROM `promotion` WHERE `group_id` = '{$groupID}' $where";
+		$resultSearchPromotion = $this->db_con->query($sqlSearchPromotion);
+        $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchPromotion,MYSQLI_ASSOC);
+        $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		
+
+        return $arr_result;
+    }
+
+    public function searchPromotionListByProductID($ompID,$productID) {
+        $ompID = $this->db_con->real_escape_string($ompID);
+        $productID = $this->db_con->real_escape_string($productID);
+        ($ompID === "1") ? $where = "" : $where = " AND omp_id = '{$ompID}'";
+   		$sqlSearchPromotion = "SELECT id,group_id,product_id,promotion_name,promotion_product_amount,promotion_price,promotion_period_begin,promotion_period_end,status,create_date FROM `promotion` WHERE `product_id` = '{$productID}' AND `status` = '1' $where";
 		$resultSearchPromotion = $this->db_con->query($sqlSearchPromotion);
         $arr_result[STRPRODUCTS] = mysqli_fetch_all($resultSearchPromotion,MYSQLI_ASSOC);
         $arr_result[STRTOTAL] = count($arr_result[STRPRODUCTS]);		
