@@ -52,6 +52,8 @@ class Validate extends General
 		define("JSONORDERSTATUS","order_status");
 		define("JSONORDERCOUNTRY","order_country");
 		define("JSONORDERBYACCOUNT","order_by_account_id");
+		define("JSONORDERSTARTROW","order_startrow");
+		define("JSONORDERLENGTH","order_length");
     }
 
     public static function exec($request, $response)
@@ -278,6 +280,17 @@ class Validate extends General
 			JSONORDERDATETIME => v::date(JSONDATETIMEFORMAT)->notBlank(),
 			JSONORDERPAYMENTID => v::intVal(),
 			JSONORDERBYACCOUNT => v::intVal()->notBlank(),
+		);
+	}
+
+	public static function validatesearchOrderListByCondition()
+	{
+		$self = New Self();
+		return array(
+			JSONOMPID => v::intVal()->notBlank(),
+			JSONGROUPID => v::intVal()->notBlank(),
+			JSONORDERSTARTROW => v::intVal(),
+			JSONORDERLENGTH => v::intVal(),
 		);
 	}
 

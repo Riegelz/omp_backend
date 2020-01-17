@@ -344,6 +344,17 @@ $app->group('/api/v1/order', function () use ($app) {
 		return Search::searchOrderListByID($request,$response,$args);
     });
 
+    $app->post('/search_order', function (Request $request, Response $response) {
+        
+        $errors = Validate::exec($request, $response);
+		if(!empty($errors)) {
+            return $response->withJson(General::responseFormat(400, $errors));
+        }else{
+            return Search::searchOrderListByCondition($request,$response);
+        }
+        
+    })->add(new Validation(Validate::validatesearchOrderListByCondition()));
+
 })->add($authen);
 
 $app->group('/api/v1/auth', function () use ($app) {

@@ -242,6 +242,18 @@ class Search extends General
                 if(isset($searchOrderListByID)) { return $response->withJson(General::responseFormat(200,$searchOrderListByID)); }
         }
 
+        public static function searchOrderListByCondition($request,$response)
+	{
+                $self = New Self();
+                $model = New Order();
+                $reqbody = $request->getParsedBody();
+                ## Search Order in DB ##
+                $SearchOrder = $model->SearchOrder($reqbody);
+                $countSearchOrder = $model->countSearchOrder($reqbody);
+                $datas = array_merge($SearchOrder ,$countSearchOrder);
+                if(isset($SearchOrder)) { return $response->withJson(General::responseFormat(200,$datas)); }
+        }
+
         public static function searchOmpID($request,$response,$args)
 	{
                 $self = New Self();

@@ -96,6 +96,19 @@ class Order extends General
 		return true;
     }
 
+    public function getRoleInGroup($accountID,$groupID) {
+        $group_id = $this->db_con->real_escape_string($groupID);
+        $account_id = $this->db_con->real_escape_string($accountID);
+        $sqlCheckRole = "SELECT group_role FROM `group_member` WHERE `group_id` = '{$group_id}' AND `account_id` = '{$account_id}'";
+		$resultCheckRole = $this->db_con->query($sqlCheckRole);
+        $arr_result = mysqli_fetch_array($resultCheckRole,MYSQLI_ASSOC);
+
+		if(!isset($arr_result)){
+            return $response_code = '614';
+		}
+		return $arr_result;
+    }
+
     #### ORDER MODEL ####
 
     public function AddOrder($req) {
@@ -252,15 +265,159 @@ class Order extends General
         return $arr_result;
     }
 
+    public function SearchOrder($req) {
+        $where = "";
+        $ompID = $this->db_con->real_escape_string($req[OMPID]);
+        if ($ompID != "1") {
+			$where .= "AND `order_transaction`.`omp_id` = '{$ompID}' ";
+		}
+        $group_id = $this->db_con->real_escape_string($req[GROUPID]);
+        $product_id = $this->db_con->real_escape_string($req[PRODUCTID]);
+        if ($product_id) {
+			$where .= "AND `order_transaction`.`product_id` = '{$product_id}' ";
+		}
+        $order_name = $this->db_con->real_escape_string($req[ORDERNAME]);
+        if ($order_name) {
+			$where .= "AND `order_transaction`.`order_name` LIKE '%{$order_name}%' ";
+		}
+        $order_district = $this->db_con->real_escape_string($req[ORDERDIST]);
+        if ($order_district) {
+			$where .= "AND `order_transaction`.`order_district` = '{$order_district}' ";
+		}
+        $order_subdistrict = $this->db_con->real_escape_string($req[ORDERSUBDIST]);
+        if ($order_subdistrict) {
+			$where .= "AND `order_transaction`.`order_subdistrict` = '{$order_subdistrict}' ";
+		}
+        $order_zipcode = $this->db_con->real_escape_string($req[ORDERZIPCODE]);
+        if ($order_zipcode) {
+			$where .= "AND `order_transaction`.`order_zipcode` = '{$order_zipcode}' ";
+		}
+        $order_province = $this->db_con->real_escape_string($req[ORDERPROV]);
+        if ($order_province) {
+			$where .= "AND `order_transaction`.`order_province` LIKE '%{$order_province}%' ";
+		}
+        $order_telnumber = $this->db_con->real_escape_string($req[ORDERTEL]);
+        if ($order_telnumber) {
+			$where .= "AND `order_transaction`.`order_telnumber` = '{$order_telnumber}' ";
+		}
+        $order_logistics_id = $this->db_con->real_escape_string($req[ORDERLOGISTICID]);
+        if ($order_logistics_id) {
+			$where .= "AND `order_transaction`.`order_logistics_id` = '{$order_logistics_id}' ";
+		}
+        $order_payment_id = $this->db_con->real_escape_string($req[ORDERPAYMENTID]);
+        if ($order_payment_id) {
+			$where .= "AND `order_transaction`.`order_payment_id` = '{$order_payment_id}' ";
+		}
+        $order_tracking_id = $this->db_con->real_escape_string($req[ORDERTRACKING]);
+        if ($order_tracking_id) {
+			$where .= "AND `order_transaction`.`order_tracking_id` = '{$order_tracking_id}' ";
+		}
+        $order_status = $this->db_con->real_escape_string($req[ORDERSTATUS]);
+        if ($order_status) {
+			$where .= "AND `order_transaction`.`order_status` = '{$order_status}' ";
+		}
+        $order_by_account_id = $this->db_con->real_escape_string($req[ORDERACCOUNTID]);
+        if ($order_by_account_id) {
+			$where .= "AND `order_transaction`.`order_by_account_id` = '{$order_by_account_id}' ";
+        }
+        $order_datetime = $this->db_con->real_escape_string($req[ORDERDATETIME]);
+        if ($order_datetime) {
+            $explode = explode(" - ", $order_datetime);
+            $datefrom = date("Y-m-d 00:00:00",strtotime($explode[0]));
+            $dateto = date("Y-m-d 23:59:59",strtotime($explode[1]));
+			$where .= "AND `order_transaction`.`order_datetime` >= '{$datefrom}' AND `order_transaction`.`order_datetime` <= '{$dateto}' ";
+        }
+        $order_startrow = $this->db_con->real_escape_string($req['order_startrow']);
+        $order_length = $this->db_con->real_escape_string($req['order_length']);
 
+        $sqlSearchOrder = "SELECT `order_transaction`.`id`, `order_transaction`.`order_status`, `product`.`product_name`, `order_transaction`.`order_name`, `order_transaction`.`transaction_id`, `order_transaction`.`order_address`, `order_transaction`.`order_district`, `order_transaction`.`order_subdistrict`, `order_transaction`.`order_zipcode`, `order_transaction`.`order_province`, `order_transaction`.`order_telnumber`, `order_transaction`.`order_cost`, `payment`.`payment_code`, `logistics`.`logistics_name`, `order_transaction`.`order_datetime`, `order_transaction`.`order_description`, `order_transaction`.`order_tracking_id`, `account`.`username`";
+        $sqlSearchOrder .= " FROM `order_transaction`";
+        $sqlSearchOrder .= " LEFT JOIN `logistics`";
+        $sqlSearchOrder .= " ON `order_transaction`.`order_logistics_id` = `logistics`.`id`";
+        $sqlSearchOrder .= " LEFT JOIN `payment`";
+        $sqlSearchOrder .= " ON `order_transaction`.`order_payment_id` = `payment`.`id`";
+        $sqlSearchOrder .= " LEFT JOIN `account`";
+        $sqlSearchOrder .= " ON `order_transaction`.`order_by_account_id` = `account`.`id`";
+        $sqlSearchOrder .= " LEFT JOIN `product`";
+        $sqlSearchOrder .= " ON `order_transaction`.`product_id` = `product`.`id`";
+        $sqlSearchOrder .= " WHERE `order_transaction`.`group_id` = '{$group_id}' $where";
+        $sqlSearchOrder .= "LIMIT {$order_length} OFFSET {$order_startrow}";
+		$resultSearchOrder = $this->db_con->query($sqlSearchOrder);
+        $arr_result[STRORDER] = mysqli_fetch_all($resultSearchOrder,MYSQLI_ASSOC);
 
+        return $arr_result;
+    }
 
+    public function countSearchOrder($req) {
+        $where = "";
+        $ompID = $this->db_con->real_escape_string($req[OMPID]);
+        if ($ompID != "1") {
+			$where .= "AND omp_id = '{$ompID}' ";
+		}
+        $group_id = $this->db_con->real_escape_string($req[GROUPID]);
+        $product_id = $this->db_con->real_escape_string($req[PRODUCTID]);
+        if ($product_id) {
+			$where .= "AND product_id = '{$product_id}' ";
+		}
+        $order_name = $this->db_con->real_escape_string($req[ORDERNAME]);
+        if ($order_name) {
+			$where .= "AND order_name LIKE '%{$order_name}%' ";
+		}
+        $order_district = $this->db_con->real_escape_string($req[ORDERDIST]);
+        if ($order_district) {
+			$where .= "AND order_district = '{$order_district}' ";
+		}
+        $order_subdistrict = $this->db_con->real_escape_string($req[ORDERSUBDIST]);
+        if ($order_subdistrict) {
+			$where .= "AND order_subdistrict = '{$order_subdistrict}' ";
+		}
+        $order_zipcode = $this->db_con->real_escape_string($req[ORDERZIPCODE]);
+        if ($order_zipcode) {
+			$where .= "AND order_zipcode = '{$order_zipcode}' ";
+		}
+        $order_province = $this->db_con->real_escape_string($req[ORDERPROV]);
+        if ($order_province) {
+			$where .= "AND order_province LIKE '%{$order_province}%' ";
+		}
+        $order_telnumber = $this->db_con->real_escape_string($req[ORDERTEL]);
+        if ($order_telnumber) {
+			$where .= "AND order_telnumber = '{$order_telnumber}' ";
+		}
+        $order_logistics_id = $this->db_con->real_escape_string($req[ORDERLOGISTICID]);
+        if ($order_logistics_id) {
+			$where .= "AND order_logistics_id = '{$order_logistics_id}' ";
+		}
+        $order_payment_id = $this->db_con->real_escape_string($req[ORDERPAYMENTID]);
+        if ($order_payment_id) {
+			$where .= "AND order_payment_id = '{$order_payment_id}' ";
+		}
+        $order_tracking_id = $this->db_con->real_escape_string($req[ORDERTRACKING]);
+        if ($order_tracking_id) {
+			$where .= "AND order_tracking_id = '{$order_tracking_id}' ";
+		}
+        $order_status = $this->db_con->real_escape_string($req[ORDERSTATUS]);
+        if ($order_status) {
+			$where .= "AND order_status = '{$order_status}' ";
+		}
+        $order_by_account_id = $this->db_con->real_escape_string($req[ORDERACCOUNTID]);
+        if ($order_by_account_id) {
+			$where .= "AND order_by_account_id = '{$order_by_account_id}' ";
+        }
+        $order_datetime = $this->db_con->real_escape_string($req[ORDERDATETIME]);
+        if ($order_datetime) {
+            $explode = explode(" - ", $order_datetime);
+            $datefrom = date("Y-m-d 00:00:00",strtotime($explode[0]));
+            $dateto = date("Y-m-d 23:59:59",strtotime($explode[1]));
+			$where .= "AND `order_datetime` >= '{$datefrom}' AND `order_datetime` <= '{$dateto}' ";
+        }
 
+        $sqlSearchOrder = "SELECT count(`id`) AS total FROM `order_transaction`";
+        $sqlSearchOrder .= " WHERE `group_id` = '{$group_id}' $where";
+		$resultSearchOrder = $this->db_con->query($sqlSearchOrder);
+        $arr_result[STRTOTAL] = mysqli_fetch_object($resultSearchOrder);
 
-
-
-
-    
+        return $arr_result;
+    }
 
     public function searchLogisticCostList($ompID) {
         $ompID = $this->db_con->real_escape_string($ompID);
