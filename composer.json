@@ -6,7 +6,6 @@
         "davidepastore/slim-validation": "^0.5.1"
     },
     "require-dev": {
-        "mockery/mockery": "dev-master",
         "phpunit/phpunit": "^7"
     },
     "autoload": {
